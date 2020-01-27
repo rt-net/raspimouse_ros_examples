@@ -1,6 +1,6 @@
 <launch>
   <node pkg="cv_camera" name="cv_camera" type="cv_camera_node" required="true" />
   <node pkg="web_video_server" name="web_video_server" type="web_video_server" required="true" />
-  <node pkg="pimouse_ros" name="pimouse_ros" type="motor1.py" required="true" />
-  <node pkg="pimouse_object_tracker" name="pimouse_object_tracker" type="object_tracker" required="true" />
+  <node pkg="pimouse_ros" name="motors" type="motors.py" required="true" />
+<!--  <node pkg="raspimouse_ros_examples" name="object_tracking" type="object_tracking.py" required="true" /> -->
 </launch>

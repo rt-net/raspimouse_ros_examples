@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>pimouse_object_tracking</name>
+  <name>raspimouse_ros_examples</name>
   <version>0.0.1</version>
   <description>The pimouse_object_tracking package</description>
 
