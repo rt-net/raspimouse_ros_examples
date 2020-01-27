@@ -18,13 +18,13 @@ LOWER_PERCENT = 0.01
 
 class ObjectTracker():
     def __init__(self):
-        sub = rospy.Subscriber("/cv_camera/image_raw", Image, self.get_image)
         self.bridge = CvBridge()
         self.image_org = None # 取得した画像
         self.area_max = 0 # 現在の画像中で検出された最大面積[pixel^2]
         self.area_default = 0 # 最初(起動時)に取得した面積[pixel^2]
         self.disp_default_now = 0 # 初期面積と現在の面積の差 [%]
-        self.area_whole = 0 # 画像全体の面積[pixel^2]
+        self.area_whole = None # 画像全体の面積[pixel^2]
+        sub = rospy.Subscriber("/cv_camera/image_raw", Image, self.get_image)
         self.pub = rospy.Publisher("object", Image, queue_size=1)
         self.cmd_vel = rospy.Publisher("/cmd_vel", Twist, queue_size=1)
         rospy.wait_for_service("/motor_on")
@@ -38,10 +38,11 @@ class ObjectTracker():
             self.image_org = self.bridge.imgmsg_to_cv2(img, "bgr8")
             # 画面全体の面積計算
             self.area_whole = self.image_org.shape[0] * self.image_org.shape[1]
+
         except CvBridgeError as e:
             rospy.logerr(e)
 
-    def detect_orange(self):
+    def detect_ball(self):
         if self.image_org is None:
             return None
         org = self.image_org
@@ -92,7 +93,7 @@ class ObjectTracker():
 
     # 物体の重心位置から回転角を決定
     def rot_vel(self):
-        point_cog = self.detect_orange()
+        point_cog = self.detect_ball()
         if (self.area_max/self.area_whole < LOWER_PERCENT):
             return 0.0
         wid = self.image_org.shape[1]/2
@@ -102,6 +103,7 @@ class ObjectTracker():
         return rot
 
     def control(self):
+
         m = Twist()
         # m.linear.x: 直進のパラメータ
         # m.angular.z: 回転のパラメータ
