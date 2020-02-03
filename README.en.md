@@ -4,9 +4,7 @@
 
 # License
 
-This repository is published under the Apache 2.0 license. 
-
-Please refer to [LICENSE](./LICENSE) for license.
+This repository is published under the Apache 2.0 license. Please refer to [LICENSE](./LICENSE) for license.
 
 ### object_tracking.py
 
