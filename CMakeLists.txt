@@ -9,7 +9,6 @@ project(raspimouse_ros_examples)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   cv_bridge
-  pimouse_ros
   sensor_msgs
 )
 
