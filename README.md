@@ -1,30 +1,41 @@
-# pimouse_object_tracking
+[English](README.en.md) | [日本語](README.md)
+
+# raspimouse_ros_exapmles
+
+# License
+
+このリポジトリはApache 2.0ライセンスの元、公開されています。 
+ライセンスについては[LICENSE](./LICENSE)を参照ください。
 
 ### object_tracking.pyの実行
 
 オレンジ色のボールの追跡を行うコード例です。
-市販のWebカメラとOpenCVを使ってボール追跡をします。
 
-次のコマンドでOpenCVのPythonライブラリをインストールしてください。
+USB接続のWebカメラとOpenCVを使ってボール追跡をします。
+
+WebカメラをRaspberry Piに接続して，Raspberry Pi Mouseの正面に向けて下さい．
+
+次のコマンドでPython用のOpenCVライブラリをインストールして下さい。
 ```sh
 sudo apt-get install ros-melodic-cv-camera
 sudo apt-get install python-opencv
 ```
 
-次のコマンドでノードを起動します。
+カメラの自動調節機能（自動露光，オートホワイトバランス等）を切るため，
+カメラ制御用のパッケージ（v4l-utils）とシェルスクリプトを用います．
+
 ```sh
-rosrun cv_camera cv_camera_node
-rosrun pimouse_ros motors.py
-rosrun raspimouse_ros_examples object_tracking.py
+sudo apt-get install v4l-utils
+./scripts/camera.bash
 ```
 
-ボールの検出結果を確認したい場合，web_videeo_serverの追加が必要です．
+
+roslaunchを用いてノードを起動します。
 ```sh
-sudo apt-get install ros-melodic-web-video-server 
-rosrun web_video_server web_video_server
+roslaunch raspimouse_ros_examples pimouse_object_tracking.launch
 ```
-web_video_serverのデフォルトのポート番号は8080です．
-[Raspberry PiのローカルIPアドレス]:8080で接続できます．
+
+[Raspberry PiのローカルIPアドレス]:8080でカメラから取得した画像や処理結果の確認が出来ます．
 
 *ボール追跡をする場合*
 
@@ -33,7 +44,7 @@ web_video_serverのデフォルトのポート番号は8080です．
 ```python
     def detect_ball(self):<
     # ~~~ 省略 ~~~
-    # HSV色空間を用いてオレンジ色を抽出<
+    # Extract orange(use HSV color model)~
         hsv = cv2.cvtColor(org, cv2.COLOR_BGR2HSV)<
         min_hsv_orange = np.array([15, 150, 40])<
         max_hsv_orange = np.array([20, 255, 255])<
