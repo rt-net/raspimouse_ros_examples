@@ -21,7 +21,8 @@ class ObjectTracker():
         self.object_pixels_default = 0 # Maximum area detected from the first image[pixel]
         self.image_pixels = None # Total number of pixels[pixel]
         sub = rospy.Subscriber("/cv_camera/image_raw", Image, self.get_image)
-        self.pub = rospy.Publisher("object", Image, queue_size=1)
+        self.pub_binary = rospy.Publisher("binary", Image, queue_size=1)
+        self.pub_object = rospy.Publisher("object", Image, queue_size=1)
         self.cmd_vel = rospy.Publisher("/cmd_vel", Twist, queue_size=1)
         rospy.wait_for_service("/motor_on")
         rospy.wait_for_service("/motor_off")
@@ -37,8 +38,9 @@ class ObjectTracker():
     def image_processing(self):
         self.image_pixels = self.img_org.shape[0] * self.img_org.shape[1]
         object_binary_img = self.detect_ball()
+        self.monitor(object_binary_img, self.pub_binary)
         centroid_img, self.point_centroid = self.detect_centroid(object_binary_img)
-        self.monitor(centroid_img)
+        self.monitor(centroid_img, self.pub_object)
 
     def detected_target(self):
         return self.object_pixels/self.image_pixels > ObjectTracker.LOWER_LIMIT
@@ -52,15 +54,33 @@ class ObjectTracker():
     def object_is_smaller_than_default(self):
         return self.object_pixels_ratio() < -0.01
 
+    def set_color_orange(self):
+        min_hsv_orange = np.array([15, 150, 40])
+        max_hsv_orange = np.array([20, 255, 255])
+        return min_hsv_orange, max_hsv_orange
+    
+    def set_color_green(self):
+        min_hsv_green = np.array([60, 60, 40])
+        max_hsv_green = np.array([70, 255, 255])
+        return min_hsv_green, max_hsv_green
+
+    def set_color_blue(self):
+        min_hsv_blue= np.array([105, 90, 40])
+        max_hsv_blue= np.array([120, 255, 255])
+        return min_hsv_blue, max_hsv_blue
+
     # Extract object(use HSV color model)
     def detect_ball(self):
         if self.img_org is None:
             return None
         org = self.img_org
         hsv = cv2.cvtColor(org, cv2.COLOR_BGR2HSV)
-        min_hsv_orange = np.array([15, 150, 40])
-        max_hsv_orange = np.array([20, 255, 255])
-        binary = cv2.inRange(hsv, min_hsv_orange, max_hsv_orange)
+
+        #min_hsv, max_hsv = self.set_color_orange()
+        #min_hsv, max_hsv = self.set_color_green()
+        min_hsv, max_hsv = self.set_color_blue()
+
+        binary = cv2.inRange(hsv, min_hsv, max_hsv)
         # Morphology
         kernel = np.ones((5, 5), np.uint8)
         binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel, iterations = 2)
@@ -94,9 +114,13 @@ class ObjectTracker():
             centroid_img = cv2.circle(centroid_img, point_centroid, 15, (255, 0, 0), thickness=-1) 
         return centroid_img, point_centroid
 
-    def monitor(self, org):
-        self.pub.publish(self.bridge.cv2_to_imgmsg(org, "bgr8"))
-        return "detected"
+    def monitor(self, img, pub):
+        if img.ndim == 2:
+            pub.publish(self.bridge.cv2_to_imgmsg(img, "mono8"))
+        elif img.ndim == 3:
+            pub.publish(self.bridge.cv2_to_imgmsg(img, "bgr8"))
+        else:
+            pass
 
     # Determine rotation angle from center of gravity position
     def rot_vel(self):
