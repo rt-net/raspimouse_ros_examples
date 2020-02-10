@@ -17,7 +17,7 @@ class ObjectTracker():
     def __init__(self):
         self.bridge = CvBridge()
         self.image_org = None # Acquired image
-        self.area_max = 0 # Maximum area detected in the current image[pixel]
+        self.object_pixels = 0 # Maximum area detected in the current image[pixel]
         self.area_default = 0 # Maximum area detected from the first image[pixel]
         self.disp_default_now = 0 # Difference between area_max and area_default[%]
         self.area_whole = None # Total number of pixels[pixel]
@@ -56,24 +56,24 @@ class ObjectTracker():
         return point_cog
 
     def detect_cog(self, binary):
-        self.area_max = 0
+        self.object_pixels = 0
         area_max_num = 0
         _, contours, hierarchy = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         point_cog = (self.image_org.shape[1], self.image_org.shape[0])
         # Find index of maximum area
         for i, cnt in enumerate(contours):
                 area = cv2.contourArea(cnt)
-                if(self.area_max < area):
-                    self.area_max = area
+                if(self.object_pixels < area):
+                    self.object_pixels = area
                     area_max_num = i
         # Determine initial area
-        if(self.area_default == 0 and self.area_max != 0):
-            self.area_default = self.area_max
-        self.disp_default_now = (self.area_default - self.area_max) / self.area_whole
+        if(self.area_default == 0 and self.object_pixels != 0):
+            self.area_default = self.object_pixels
+        self.disp_default_now = (self.area_default - self.object_pixels) / self.area_whole
         # Draw countours
         cog_img = cv2.drawContours(self.image_org, contours, area_max_num, (0, 255, 0), 5)
 
-        if(self.area_max/self.area_whole > ObjectTracker.LOWER_LIMIT):
+        if(self.object_pixels/self.area_whole > ObjectTracker.LOWER_LIMIT):
             # Calsulate center of gravity
             M = cv2.moments(contours[area_max_num])
             cog_x = int(M['m10'] / M['m00'])
@@ -89,7 +89,7 @@ class ObjectTracker():
     # Determine rotation angle from center of gravity position
     def rot_vel(self):
         point_cog = self.detect_ball()
-        if (self.area_max/self.area_whole < ObjectTracker.LOWER_LIMIT):
+        if (self.object_pixels/self.area_whole < ObjectTracker.LOWER_LIMIT):
             return 0.0
         wid = self.image_org.shape[1]/2
         pos_x_rate = (point_cog[0] - wid)*1.0/wid
@@ -102,7 +102,7 @@ class ObjectTracker():
         m = Twist()
         # m.linear.x: speed parameter
         # m.angular.z: angle parameter
-        if(self.area_max/self.area_whole > ObjectTracker.LOWER_LIMIT):
+        if(self.object_pixels/self.area_whole > ObjectTracker.LOWER_LIMIT):
             # Move backward and forward by difference from default area
             if(self.disp_default_now > 0.01):
                 m.linear.x = 0.1
