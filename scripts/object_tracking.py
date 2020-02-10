@@ -9,7 +9,6 @@ from geometry_msgs.msg import Twist
 from std_srvs.srv import Trigger
 
 
-
 class ObjectTracker():
     # Lower limit of the ratio of the detected area to the screen.
     # Object tracking is not performed below this ratio.
@@ -17,7 +16,7 @@ class ObjectTracker():
 
     def __init__(self):
         self.bridge = CvBridge()
-        self.image_org = None # Acquired image
+        self.img_org = None # Acquired image
         self.object_pixels = 0 # Maximum area detected in the current image[pixel]
         self.object_pixels_default = 0 # Maximum area detected from the first image[pixel]
         self.image_pixels = None # Total number of pixels[pixel]
@@ -31,12 +30,16 @@ class ObjectTracker():
 
     def get_image(self, img):
         try:
-            self.image_org = self.bridge.imgmsg_to_cv2(img, "bgr8")
+            self.img_org = self.bridge.imgmsg_to_cv2(img, "bgr8")
             # Calculate total number of pixels
-            self.image_pixels = self.image_org.shape[0] * self.image_org.shape[1]
-
+            self.image_pixels = self.img_org.shape[0] * self.img_org.shape[1]
         except CvBridgeError as e:
             rospy.logerr(e)
+
+    def image_processing(self):
+        object_binary_img = self.detect_ball()
+        centroid_img, self.point_centroid = self.detect_centroid(object_binary_img)
+        self.monitor(centroid_img)
 
     def detected_target(self):
         return self.object_pixels/self.image_pixels > ObjectTracker.LOWER_LIMIT
@@ -50,11 +53,11 @@ class ObjectTracker():
     def object_is_smaller_than_default(self):
         return self.object_pixels_ratio() < -0.01
 
+    # Extract object(use HSV color model)
     def detect_ball(self):
-        if self.image_org is None:
+        if self.img_org is None:
             return None
-        org = self.image_org
-        # Extract orange(use HSV color model) 
+        org = self.img_org
         hsv = cv2.cvtColor(org, cv2.COLOR_BGR2HSV)
         min_hsv_orange = np.array([15, 150, 40])
         max_hsv_orange = np.array([20, 255, 255])
@@ -62,16 +65,13 @@ class ObjectTracker():
         # Morphology
         kernel = np.ones((5, 5), np.uint8)
         binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel, iterations = 2)
-        # Calculate center of gravity
-        centroid_img, point_centroid = self.detect_centroid(binary)
-        self.monitor(centroid_img)
-        return point_centroid
+        return binary
 
     def detect_centroid(self, binary):
         self.object_pixels = 0
         area_max_num = 0
         _, contours, hierarchy = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        point_centroid = (self.image_org.shape[1], self.image_org.shape[0])
+        point_centroid = (self.img_org.shape[1], self.img_org.shape[0])
         # Find index of maximum area
         for i, cnt in enumerate(contours):
                 area = cv2.contourArea(cnt)
@@ -82,7 +82,7 @@ class ObjectTracker():
         if self.object_pixels_default == 0 and self.object_pixels != 0:
             self.object_pixels_default = self.object_pixels
         # Draw countours
-        centroid_img = cv2.drawContours(self.image_org, contours, area_max_num, (0, 255, 0), 5)
+        centroid_img = cv2.drawContours(self.img_org, contours, area_max_num, (0, 255, 0), 5)
 
         if self.detected_target():
             # Calsulate center of gravity
@@ -99,17 +99,15 @@ class ObjectTracker():
 
     # Determine rotation angle from center of gravity position
     def rot_vel(self):
-        point_centroid = self.detect_ball()
         if not self.detected_target():
             return 0.0
-        wid = self.image_org.shape[1]/2
-        pos_x_rate = (point_centroid[0] - wid)*1.0/wid
+        wid = self.img_org.shape[1]/2
+        pos_x_rate = (self.point_centroid[0] - wid)*1.0/wid
         rot = -0.25*pos_x_rate*math.pi
         rospy.loginfo("detect %f", rot)
         return rot
 
     def control(self):
-
         m = Twist()
         # m.linear.x: speed parameter
         # m.angular.z: angle parameter
@@ -137,6 +135,7 @@ if __name__ == '__main__':
     rate = rospy.Rate(10)
     rate.sleep()
     while not rospy.is_shutdown():
+        ot.image_processing()
         ot.control()
         rate.sleep()
 
