@@ -31,12 +31,11 @@ class ObjectTracker():
     def get_image(self, img):
         try:
             self.img_org = self.bridge.imgmsg_to_cv2(img, "bgr8")
-            # Calculate total number of pixels
-            self.image_pixels = self.img_org.shape[0] * self.img_org.shape[1]
         except CvBridgeError as e:
             rospy.logerr(e)
 
     def image_processing(self):
+        self.image_pixels = self.img_org.shape[0] * self.img_org.shape[1]
         object_binary_img = self.detect_ball()
         centroid_img, self.point_centroid = self.detect_centroid(object_binary_img)
         self.monitor(centroid_img)
@@ -67,6 +66,10 @@ class ObjectTracker():
         binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel, iterations = 2)
         return binary
 
+    def calibrate_object_pixels_default(self):
+        if self.object_pixels_default == 0 and self.object_pixels != 0:
+            self.object_pixels_default = self.object_pixels
+
     def detect_centroid(self, binary):
         self.object_pixels = 0
         area_max_num = 0
@@ -78,12 +81,10 @@ class ObjectTracker():
                 if self.object_pixels < area:
                     self.object_pixels = area
                     area_max_num = i
-        # Determine initial area
-        if self.object_pixels_default == 0 and self.object_pixels != 0:
-            self.object_pixels_default = self.object_pixels
+        # Define object_pixels_default
+        self.calibrate_object_pixels_default()
         # Draw countours
         centroid_img = cv2.drawContours(self.img_org, contours, area_max_num, (0, 255, 0), 5)
-
         if self.detected_target():
             # Calsulate center of gravity
             M = cv2.moments(contours[area_max_num])
