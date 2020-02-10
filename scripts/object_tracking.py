@@ -18,9 +18,9 @@ class ObjectTracker():
         self.bridge = CvBridge()
         self.image_org = None # Acquired image
         self.object_pixels = 0 # Maximum area detected in the current image[pixel]
-        self.area_default = 0 # Maximum area detected from the first image[pixel]
+        self.object_pixels_default = 0 # Maximum area detected from the first image[pixel]
         self.disp_default_now = 0 # Difference between area_max and area_default[%]
-        self.area_whole = None # Total number of pixels[pixel]
+        self.image_pixels = None # Total number of pixels[pixel]
         sub = rospy.Subscriber("/cv_camera/image_raw", Image, self.get_image)
         self.pub = rospy.Publisher("object", Image, queue_size=1)
         self.cmd_vel = rospy.Publisher("/cmd_vel", Twist, queue_size=1)
@@ -33,7 +33,7 @@ class ObjectTracker():
         try:
             self.image_org = self.bridge.imgmsg_to_cv2(img, "bgr8")
             # Calculate total number of pixels
-            self.area_whole = self.image_org.shape[0] * self.image_org.shape[1]
+            self.image_pixels = self.image_org.shape[0] * self.image_org.shape[1]
 
         except CvBridgeError as e:
             rospy.logerr(e)
@@ -67,13 +67,13 @@ class ObjectTracker():
                     self.object_pixels = area
                     area_max_num = i
         # Determine initial area
-        if(self.area_default == 0 and self.object_pixels != 0):
-            self.area_default = self.object_pixels
-        self.disp_default_now = (self.area_default - self.object_pixels) / self.area_whole
+        if(self.object_pixels_default == 0 and self.object_pixels != 0):
+            self.object_pixels_default = self.object_pixels
+        self.disp_default_now = (self.object_pixels_default - self.object_pixels) / self.image_pixels
         # Draw countours
         cog_img = cv2.drawContours(self.image_org, contours, area_max_num, (0, 255, 0), 5)
 
-        if(self.object_pixels/self.area_whole > ObjectTracker.LOWER_LIMIT):
+        if(self.object_pixels/self.image_pixels > ObjectTracker.LOWER_LIMIT):
             # Calsulate center of gravity
             M = cv2.moments(contours[area_max_num])
             cog_x = int(M['m10'] / M['m00'])
@@ -89,7 +89,7 @@ class ObjectTracker():
     # Determine rotation angle from center of gravity position
     def rot_vel(self):
         point_cog = self.detect_ball()
-        if (self.object_pixels/self.area_whole < ObjectTracker.LOWER_LIMIT):
+        if (self.object_pixels/self.image_pixels < ObjectTracker.LOWER_LIMIT):
             return 0.0
         wid = self.image_org.shape[1]/2
         pos_x_rate = (point_cog[0] - wid)*1.0/wid
@@ -102,7 +102,7 @@ class ObjectTracker():
         m = Twist()
         # m.linear.x: speed parameter
         # m.angular.z: angle parameter
-        if(self.object_pixels/self.area_whole > ObjectTracker.LOWER_LIMIT):
+        if(self.object_pixels/self.image_pixels > ObjectTracker.LOWER_LIMIT):
             # Move backward and forward by difference from default area
             if(self.disp_default_now > 0.01):
                 m.linear.x = 0.1
