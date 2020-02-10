@@ -14,12 +14,12 @@ class ObjectTracker():
     # Lower limit of the ratio of the detected area to the screen.
     # Object tracking is not performed below this ratio.
     LOWER_LIMIT = 0.01
+
     def __init__(self):
         self.bridge = CvBridge()
         self.image_org = None # Acquired image
         self.object_pixels = 0 # Maximum area detected in the current image[pixel]
         self.object_pixels_default = 0 # Maximum area detected from the first image[pixel]
-        self.disp_default_now = 0 # Difference between area_max and area_default[%]
         self.image_pixels = None # Total number of pixels[pixel]
         sub = rospy.Subscriber("/cv_camera/image_raw", Image, self.get_image)
         self.pub = rospy.Publisher("object", Image, queue_size=1)
@@ -37,6 +37,15 @@ class ObjectTracker():
 
         except CvBridgeError as e:
             rospy.logerr(e)
+
+    def object_pixels_ratio(self):
+        return (self.object_pixels - self.object_pixels_default) / self.image_pixels
+
+    def object_is_bigger_than_default(self):
+        return self.object_pixels_ratio() > 0.01
+
+    def object_is_smaller_than_default(self):
+        return self.object_pixels_ratio() < -0.01
 
     def detect_ball(self):
         if self.image_org is None:
@@ -69,7 +78,6 @@ class ObjectTracker():
         # Determine initial area
         if self.object_pixels_default == 0 and self.object_pixels != 0:
             self.object_pixels_default = self.object_pixels
-        self.disp_default_now = (self.object_pixels_default - self.object_pixels) / self.image_pixels
         # Draw countours
         cog_img = cv2.drawContours(self.image_org, contours, area_max_num, (0, 255, 0), 5)
 
@@ -104,10 +112,10 @@ class ObjectTracker():
         # m.angular.z: angle parameter
         if self.object_pixels/self.image_pixels > ObjectTracker.LOWER_LIMIT:
             # Move backward and forward by difference from default area
-            if self.disp_default_now > 0.01:
+            if self.object_is_smaller_than_default():
                 m.linear.x = 0.1
                 print("forward")
-            elif self.disp_default_now < -0.01:
+            elif self.object_is_bigger_than_default():
                 m.linear.x = -0.1
                 print("backward")
             else:
