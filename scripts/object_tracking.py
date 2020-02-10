@@ -38,6 +38,9 @@ class ObjectTracker():
         except CvBridgeError as e:
             rospy.logerr(e)
 
+    def detected_target(self):
+        return self.object_pixels/self.image_pixels > ObjectTracker.LOWER_LIMIT
+
     def object_pixels_ratio(self):
         return (self.object_pixels - self.object_pixels_default) / self.image_pixels
 
@@ -60,15 +63,15 @@ class ObjectTracker():
         kernel = np.ones((5, 5), np.uint8)
         binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel, iterations = 2)
         # Calculate center of gravity
-        cog_img, point_cog = self.detect_cog(binary)
-        self.monitor(cog_img)
-        return point_cog
+        centroid_img, point_centroid = self.detect_centroid(binary)
+        self.monitor(centroid_img)
+        return point_centroid
 
-    def detect_cog(self, binary):
+    def detect_centroid(self, binary):
         self.object_pixels = 0
         area_max_num = 0
         _, contours, hierarchy = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        point_cog = (self.image_org.shape[1], self.image_org.shape[0])
+        point_centroid = (self.image_org.shape[1], self.image_org.shape[0])
         # Find index of maximum area
         for i, cnt in enumerate(contours):
                 area = cv2.contourArea(cnt)
@@ -79,16 +82,16 @@ class ObjectTracker():
         if self.object_pixels_default == 0 and self.object_pixels != 0:
             self.object_pixels_default = self.object_pixels
         # Draw countours
-        cog_img = cv2.drawContours(self.image_org, contours, area_max_num, (0, 255, 0), 5)
+        centroid_img = cv2.drawContours(self.image_org, contours, area_max_num, (0, 255, 0), 5)
 
-        if self.object_pixels/self.image_pixels > ObjectTracker.LOWER_LIMIT:
+        if self.detected_target():
             # Calsulate center of gravity
             M = cv2.moments(contours[area_max_num])
-            cog_x = int(M['m10'] / M['m00'])
-            cog_y = int(M['m01'] / M['m00'])
-            point_cog = (cog_x, cog_y)
-            cog_img = cv2.circle(cog_img, point_cog, 15, (255, 0, 0), thickness=-1) 
-        return cog_img, point_cog
+            centroid_x = int(M['m10'] / M['m00'])
+            centroid_y = int(M['m01'] / M['m00'])
+            point_centroid = (centroid_x, centroid_y)
+            centroid_img = cv2.circle(centroid_img, point_centroid, 15, (255, 0, 0), thickness=-1) 
+        return centroid_img, point_centroid
 
     def monitor(self, org):
         self.pub.publish(self.bridge.cv2_to_imgmsg(org, "bgr8"))
@@ -96,11 +99,11 @@ class ObjectTracker():
 
     # Determine rotation angle from center of gravity position
     def rot_vel(self):
-        point_cog = self.detect_ball()
-        if self.object_pixels/self.image_pixels < ObjectTracker.LOWER_LIMIT:
+        point_centroid = self.detect_ball()
+        if not self.detected_target():
             return 0.0
         wid = self.image_org.shape[1]/2
-        pos_x_rate = (point_cog[0] - wid)*1.0/wid
+        pos_x_rate = (point_centroid[0] - wid)*1.0/wid
         rot = -0.25*pos_x_rate*math.pi
         rospy.loginfo("detect %f", rot)
         return rot
@@ -110,7 +113,7 @@ class ObjectTracker():
         m = Twist()
         # m.linear.x: speed parameter
         # m.angular.z: angle parameter
-        if self.object_pixels/self.image_pixels > ObjectTracker.LOWER_LIMIT:
+        if self.detected_target():
             # Move backward and forward by difference from default area
             if self.object_is_smaller_than_default():
                 m.linear.x = 0.1
