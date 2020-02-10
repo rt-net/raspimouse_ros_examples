@@ -8,12 +8,12 @@ from cv_bridge import CvBridge, CvBridgeError
 from geometry_msgs.msg import Twist
 from std_srvs.srv import Trigger
 
-# Lower limit of the ratio of the detected area to the screen.
-# Object tracking is not performed below this ratio.
-LOWER_LIMIT = 0.01
 
 
 class ObjectTracker():
+    # Lower limit of the ratio of the detected area to the screen.
+    # Object tracking is not performed below this ratio.
+    LOWER_LIMIT = 0.01
     def __init__(self):
         self.bridge = CvBridge()
         self.image_org = None # Acquired image
@@ -73,7 +73,7 @@ class ObjectTracker():
         # Draw countours
         cog_img = cv2.drawContours(self.image_org, contours, area_max_num, (0, 255, 0), 5)
 
-        if(self.area_max/self.area_whole > LOWER_LIMIT):
+        if(self.area_max/self.area_whole > ObjectTracker.LOWER_LIMIT):
             # Calsulate center of gravity
             M = cv2.moments(contours[area_max_num])
             cog_x = int(M['m10'] / M['m00'])
@@ -89,7 +89,7 @@ class ObjectTracker():
     # Determine rotation angle from center of gravity position
     def rot_vel(self):
         point_cog = self.detect_ball()
-        if (self.area_max/self.area_whole < LOWER_LIMIT):
+        if (self.area_max/self.area_whole < ObjectTracker.LOWER_LIMIT):
             return 0.0
         wid = self.image_org.shape[1]/2
         pos_x_rate = (point_cog[0] - wid)*1.0/wid
@@ -102,7 +102,7 @@ class ObjectTracker():
         m = Twist()
         # m.linear.x: speed parameter
         # m.angular.z: angle parameter
-        if(self.area_max/self.area_whole > LOWER_LIMIT):
+        if(self.area_max/self.area_whole > ObjectTracker.LOWER_LIMIT):
             # Move backward and forward by difference from default area
             if(self.disp_default_now > 0.01):
                 m.linear.x = 0.1
