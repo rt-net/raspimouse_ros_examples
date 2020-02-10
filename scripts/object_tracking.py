@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#encoding: utf8
+#coding: utf8
 
 import rospy, cv2, math
 import numpy as np
