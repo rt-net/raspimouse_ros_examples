@@ -43,10 +43,16 @@ class ObjectTracker():
         self.monitor(centroid_img, self.pub_object)
 
     def detected_target(self):
-        return self.object_pixels/self.image_pixels > ObjectTracker.LOWER_LIMIT
+        if self.image_pixels:
+            return self.object_pixels/self.image_pixels > ObjectTracker.LOWER_LIMIT
+        else:
+            return False
 
     def object_pixels_ratio(self):
-        return (self.object_pixels - self.object_pixels_default) / self.image_pixels
+        if self.image_pixels:
+            return (self.object_pixels - self.object_pixels_default) / self.image_pixels
+        else:
+            return 0
 
     def object_is_bigger_than_default(self):
         return self.object_pixels_ratio() > 0.01
