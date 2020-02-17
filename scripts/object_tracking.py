@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding: utf8
+# coding: utf-8
 
 import rospy, cv2, math
 import numpy as np
@@ -76,9 +76,9 @@ class ObjectTracker():
         org = self.img_org
         hsv = cv2.cvtColor(org, cv2.COLOR_BGR2HSV)
 
-        #min_hsv, max_hsv = self.set_color_orange()
+        min_hsv, max_hsv = self.set_color_orange()
         #min_hsv, max_hsv = self.set_color_green()
-        min_hsv, max_hsv = self.set_color_blue()
+        #min_hsv, max_hsv = self.set_color_blue()
 
         binary = cv2.inRange(hsv, min_hsv, max_hsv)
         # Morphology
