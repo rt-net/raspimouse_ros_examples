@@ -61,7 +61,7 @@ class ObjectTracker():
         return self.object_pixels_ratio() < -0.01
 
     def set_color_orange(self):
-        min_hsv_orange = np.array([15, 150, 40])
+        min_hsv_orange = np.array([15, 200, 80])
         max_hsv_orange = np.array([20, 255, 255])
         return min_hsv_orange, max_hsv_orange
     
@@ -153,8 +153,7 @@ class ObjectTracker():
             else:
                 m.linear.x = 0
                 print("stay")
-        # Center of gravity is centered on the image
-        m.angular.z = self.rot_vel()
+            m.angular.z = self.rot_vel()
         self.cmd_vel.publish(m)
 
 
