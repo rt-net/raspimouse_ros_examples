@@ -19,7 +19,7 @@ USB接続のWebカメラとOpenCVを使ってボール追跡をします。
 * ターゲットとなるボール
     * ソフトボール（オレンジ）[ストアページへのリンク](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1307&products_id=3701)
 
-ROS以外に以下のパッケージを使用します．
+ROS以外に以下のパッケージを使用します． 
 * python
     * opencv
     * numpy
