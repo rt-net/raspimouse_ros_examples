@@ -41,7 +41,7 @@ roslaunchを用いてノードを起動します。
 roslaunch raspimouse_ros_examples pimouse_object_tracking.launch
 ```
 
-[Raspberry PiのローカルIPアドレス]:8080でカメラから取得した画像や処理結果の確認が出来ます．
+\[Raspberry PiのローカルIPアドレス\]:8080でカメラから取得した画像や処理結果の確認が出来ます．
 
 *追跡対象とする色の変更方法*
 
