@@ -61,6 +61,7 @@ class ObjectTracker():
         return self.object_pixels_ratio() < -0.01
 
     def set_color_orange(self):
+        # [H(0~180), S(0~255), V(0~255)]
         min_hsv_orange = np.array([15, 200, 80])
         max_hsv_orange = np.array([20, 255, 255])
         return min_hsv_orange, max_hsv_orange
@@ -83,8 +84,8 @@ class ObjectTracker():
         hsv = cv2.cvtColor(org, cv2.COLOR_BGR2HSV)
 
         min_hsv, max_hsv = self.set_color_orange()
-        #min_hsv, max_hsv = self.set_color_green()
-        #min_hsv, max_hsv = self.set_color_blue()
+        # min_hsv, max_hsv = self.set_color_green()
+        # min_hsv, max_hsv = self.set_color_blue()
 
         binary = cv2.inRange(hsv, min_hsv, max_hsv)
         # Morphology
