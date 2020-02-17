@@ -7,12 +7,12 @@
   <license>Apache License 2.0</license>
 
   <buildtool_depend>catkin</buildtool_depend>
-  <exec_depend>rospy</depend>
-  <exec_depend>std_srvs</depend>
-  <exec_depend>sensor_msgs</depend>
-  <exec_depend>geometry_msgs</depend>
-  <exec_depend>raspimouse_ros_2</depend>
-  <exec_depend>cv_bridge</depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_srvs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>raspimouse_ros_2</exec_depend>
+  <exec_depend>cv_bridge</exec_depend>
   <exec_depend>cv_camera</exec_depend>
   <exec_depend>web_video_server</exec_depend>
 
