@@ -15,9 +15,9 @@ USB接続のWebカメラとOpenCVを使ってボール追跡をします。
 * Webカメラ
     * Logicool HD ウェブカメラ C310
 * カメラマウント
-    * Raspberry Pi Mouse オプションキット No.4 \[Webカメラマウント\] [ストアページへのリンク](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3584)
+    * [Raspberry Pi Mouse オプションキット No.4 \[Webカメラマウント\]](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3584)
 * ターゲットとなるボール
-    * ソフトボール（オレンジ）[ストアページへのリンク](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1307&products_id=3701)
+    * [ソフトボール（オレンジ）](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1307&products_id=3701)
 
 ROS以外に以下のパッケージを使用します． 
 * python
@@ -25,9 +25,7 @@ ROS以外に以下のパッケージを使用します．
     * numpy
 * v4l-utils
 
-Raspberry Pi Mouseにカメラマウントを取り付けてから，WebカメラをRaspberry Piに接続ます．
-
-カメラはRaspberry Pi Mouseの正面に向けて下さい．
+Raspberry Pi Mouseにカメラマウントを取り付け，WebカメラをRaspberry Piに接続します．
 
 カメラの自動調節機能（自動露光，オートホワイトバランス等）を切るため，
 カメラ制御用のパッケージ（v4l-utils）とシェルスクリプトを用います．
@@ -53,14 +51,18 @@ roslaunch raspimouse_ros_examples pimouse_object_tracking.launch
     def detect_ball(self):
         # ~~~ 省略 ~~~
         min_hsv, max_hsv = self.set_color_orange()
-        #min_hsv, max_hsv = self.set_color_green()
-        #min_hsv, max_hsv = self.set_color_blue()
+        # min_hsv, max_hsv = self.set_color_green()
+        # min_hsv, max_hsv = self.set_color_blue()
 ```
 
 反応が悪い時にはカメラの露光や，関数内のパラメータを調整して下さい．
 
-例として，set_color_orange()内のmin_hsv_orange，及びmax_hsv_orangeの値は
-
-HSV色空間の[H（色相）, S（彩度）, V（明度）]を表します．
-
-但しOpenCVでH（色相）は0~180の値を取る事に注意が必要です．
+（例）暗い環境で実行する場合
+```python
+    def set_color_orange(self):
+        # [H(0~180), S(0~255), V(0~255)]
+        # min_hsv_orange = np.array([15, 200, 80])
+        min_hsv_orange = np.array([15, 150, 40])
+        max_hsv_orange = np.array([20, 255, 255])
+        return min_hsv_orange, max_hsv_orange
+```
