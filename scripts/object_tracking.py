@@ -112,7 +112,6 @@ class ObjectTracker():
         # Draw countours
         centroid_img = cv2.drawContours(self.img_org, contours, area_max_num, (0, 255, 0), 5)
         if self.detected_target():
-            # Calsulate center of gravity
             M = cv2.moments(contours[area_max_num])
             centroid_x = int(M['m10'] / M['m00'])
             centroid_y = int(M['m01'] / M['m00'])
