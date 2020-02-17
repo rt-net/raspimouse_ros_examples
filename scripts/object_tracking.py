@@ -97,10 +97,10 @@ class ObjectTracker():
         point_centroid = (self.img_org.shape[1], self.img_org.shape[0])
         # Find index of maximum area
         for i, cnt in enumerate(contours):
-                area = cv2.contourArea(cnt)
-                if self.object_pixels < area:
-                    self.object_pixels = area
-                    area_max_num = i
+            area = cv2.contourArea(cnt)
+            if self.object_pixels < area:
+                self.object_pixels = area
+                area_max_num = i
         # Define object_pixels_default
         self.calibrate_object_pixels_default()
         # Draw countours
