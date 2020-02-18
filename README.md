@@ -7,6 +7,18 @@
 このリポジトリはApache 2.0ライセンスの元、公開されています。 
 ライセンスについては[LICENSE](./LICENSE)を参照ください。
 
+## Examples
+
+### joystick_controller
+
+ジョイスティックコントローラでRaspberryPiMouseを動かすコード例です。
+
+次のコマンドでノードを起動します。
+
+```sh
+roslaunch raspimouse_ros_examples joystick_control.launch 
+```
+
 ### object_tracking.pyの実行
 
 色情報をもとに，オレンジ色のボールの追跡を行うコード例です。
