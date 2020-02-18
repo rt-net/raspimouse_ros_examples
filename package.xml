@@ -3,6 +3,7 @@
   <name>raspimouse_ros_examples</name>
   <version>0.0.1</version>
   <description>The raspimouse_ros_examples package</description>
+  <maintainer email="s.aoki@rt-net.jp">ShotaAk</maintainer>
   <maintainer email="takuminpc@gmail.com">tentenNT</maintainer>
   <license>Apache License 2.0</license>
 
@@ -10,11 +11,13 @@
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_srvs</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>raspimouse_ros_2</exec_depend>
   <exec_depend>cv_bridge</exec_depend>
   <exec_depend>cv_camera</exec_depend>
   <exec_depend>web_video_server</exec_depend>
+  <exec_depend>joy</exec_depend>
 
   <export>
   </export>
