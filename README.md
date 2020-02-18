@@ -17,7 +17,7 @@ Raspberry Pi MouseのROSサンプルコード集です。
     - [Melodic Morenia](http://wiki.ros.org/melodic/Installation/Ubuntu)
   - Raspberry Pi Mouse ROS package
     - https://github.com/ryuichiueda/raspimouse_ros_2
-- Remote PC (Optional)
+- Remote Computer (Optional)
   - ROS
     - [Kinetic Kame](http://wiki.ros.org/kinetic/Installation/Ubuntu)
     - [Melodic Morenia](http://wiki.ros.org/melodic/Installation/Ubuntu)
@@ -27,13 +27,13 @@ Raspberry Pi MouseのROSサンプルコード集です。
 ## Installation
 
 ```sh
-$ cd ~/catkin_ws/src
+cd ~/catkin_ws/src
 # Clone ROS packages
-$ git clone https://github.com/ryuichiueda/raspimouse_ros_2
-$ git clone https://github.com/rt-net/raspimouse_ros_exapmles 
+git clone https://github.com/ryuichiueda/raspimouse_ros_2
+git clone https://github.com/rt-net/raspimouse_ros_exapmles 
 
 # Install dependencies
-$ rosdep install -r -y --from-paths . --ignore-src      
+rosdep install -r -y --from-paths . --ignore-src      
 
 # make & install
 cd ~/catkin_ws && catkin_make
@@ -51,14 +51,47 @@ source devel.setup.bash
 
 ## Examples
 
-### joystick_controller
+### joystick_control
 
 ジョイスティックコントローラでRaspberryPiMouseを動かすコード例です。
+
+#### Requirements 
+
+- Joystick Controller
+  - [Logicool Wireless Gamepad F710](https://gaming.logicool.co.jp/ja-jp/products/gamepads/f710-wireless-gamepad.html#940-0001440)
+  - [SONY DUALSHOCK 3](https://www.jp.playstation.com/ps3/peripheral/cechzc2j.html)
+
+#### How to use
 
 次のコマンドでノードを起動します。
 
 ```sh
-roslaunch raspimouse_ros_examples joystick_control.launch 
+roslaunch raspimouse_ros_examples joystick_control.launch
+
+# Use DUALSHOCK 3
+roslaunch raspimouse_ros_examples joystick_control.launch config:="dualshock3" 
+
+# Control from remote computer
+roslaunch raspimouse_ros_examples joystick_control.launch mouse:=false
+```
+
+デフォルトのキー割り当てはこちらです。
+
+![joystick_control_keyconfig](https://github.com/rt-net/raspimouse_ros_exapmles/blob/images/joystick_control_keyconfig.png)
+
+#### Configure
+
+[./config/joy_f710.yml](./config/joy_f710.yml)、[./config/joy_dualshock3.yml](./config/joy_dualshock3.yml)
+のキー番号を編集することで、キー割り当てを変更できます。
+
+```yaml
+button_shutdown_1       : 8
+button_shutdown_2       : 9
+
+button_motor_off        : 8
+button_motor_on         : 9
+
+button_cmd_enable       : 4
 ```
 
 --- 
@@ -88,14 +121,18 @@ USB接続のWebカメラとOpenCVを使ってボール追跡をします。
 
 Raspberry Pi Mouseにカメラマウントを取り付け，WebカメラをRaspberry Piに接続します．
 
-カメラの自動調節機能（自動露光，オートホワイトバランス等）を切るため，
-カメラ制御用のパッケージ（v4l-utils）とシェルスクリプトを用います．
+次のコマンドで、カメラ制御用のパッケージ（v4l-utils）をインストールします。
 
 ```sh
 sudo apt install v4l-utils
-./scripts/camera.bash
 ```
 #### How to use
+
+次のスクリプトを実行して、カメラの自動調節機能（自動露光，オートホワイトバランス等）を切ります。
+
+```sh
+rosrun raspimouse_ros_examples camera.bash
+```
 
 次のコマンドでノードを起動します。
 
