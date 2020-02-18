@@ -63,11 +63,11 @@ roslaunch raspimouse_ros_examples joystick_control.launch
 
 --- 
 
-### object_tracking.pyの実行
+### object_tracking
 
 ![object_tracking](https://github.com/rt-net/raspimouse_ros_exapmles/blob/images/object_tracking.JPG)
 
-色情報をもとに，オレンジ色のボールの追跡を行うコード例です。
+色情報をもとにオレンジ色のボールの追跡を行うコード例です。
 USB接続のWebカメラとOpenCVを使ってボール追跡をします。
 
 #### Requirements 
@@ -97,7 +97,8 @@ sudo apt install v4l-utils
 ```
 #### How to use
 
-roslaunchを用いてノードを起動します。
+次のコマンドでノードを起動します。
+
 ```sh
 roslaunch raspimouse_ros_examples pimouse_object_tracking.launch
 ```
