@@ -2,9 +2,11 @@
 
 # raspimouse_ros_exapmles
 
-![raspberry_pi_mouse](https://github.com/rt-net/raspimouse_ros_exapmles/blob/images/raspberry_pi_mouse.JPG)
+[![Build Status](https://travis-ci.com/rt-net/raspimouse_ros_exapmles.svg?token=44UfTwwGaAupMGxC2ZWA&branch=master)](https://travis-ci.com/rt-net/raspimouse_ros_exapmles)
 
 Raspberry Pi MouseのROSサンプルコード集です。
+
+![raspberry_pi_mouse](https://github.com/rt-net/raspimouse_ros_exapmles/blob/images/raspberry_pi_mouse.JPG)
 
 ## Requirements
 
