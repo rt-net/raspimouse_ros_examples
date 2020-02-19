@@ -1,0 +1,9 @@
+<launch>
+  <arg name="port" default="/dev/ttyACM0" />
+  <include file="$(find raspimouse_ros_2)/launch/raspimouse.launch" />
+
+  <node name="urg_node" pkg="urg_node" type="urg_node" required="true">
+    <param name="serial_port" value="$(arg port)"/>
+  </node>
+  <node pkg="tf" type="static_transform_publisher" name="laser_broadcaster" args="0 0 0.01 0 0 0 1 base_link laser 100" />
+</launch>
