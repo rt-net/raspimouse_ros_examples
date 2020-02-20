@@ -1,12 +1,12 @@
 [English](README.en.md) | [日本語](README.md)
 
-# raspimouse_ros_exapmles
+# raspimouse_ros_examples
 
-[![Build Status](https://travis-ci.com/rt-net/raspimouse_ros_exapmles.svg?token=44UfTwwGaAupMGxC2ZWA&branch=master)](https://travis-ci.com/rt-net/raspimouse_ros_exapmles)
+[![Build Status](https://travis-ci.com/rt-net/raspimouse_ros_examples.svg?token=44UfTwwGaAupMGxC2ZWA&branch=master)](https://travis-ci.com/rt-net/raspimouse_ros_examples)
 
 Raspberry Pi MouseのROSサンプルコード集です。
 
-![raspberry_pi_mouse](https://github.com/rt-net/raspimouse_ros_exapmles/blob/images/raspberry_pi_mouse.JPG)
+![raspberry_pi_mouse](https://github.com/rt-net/raspimouse_ros_examples/blob/images/raspberry_pi_mouse.JPG)
 
 ## Requirements
 
@@ -34,7 +34,7 @@ Raspberry Pi MouseのROSサンプルコード集です。
 cd ~/catkin_ws/src
 # Clone ROS packages
 git clone https://github.com/ryuichiueda/raspimouse_ros_2
-git clone https://github.com/rt-net/raspimouse_ros_exapmles 
+git clone https://github.com/rt-net/raspimouse_ros_examples 
 
 # Install dependencies
 rosdep install -r -y --from-paths . --ignore-src      
