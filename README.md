@@ -2,7 +2,7 @@
 
 # raspimouse_ros_examples
 
-[![Build Status](https://travis-ci.com/rt-net/raspimouse_ros_examples.svg?token=44UfTwwGaAupMGxC2ZWA&branch=master)](https://travis-ci.com/rt-net/raspimouse_ros_examples)
+[![Build Status](https://travis-ci.com/rt-net/raspimouse_ros_exapmles.svg?token=44UfTwwGaAupMGxC2ZWA&branch=master)](https://travis-ci.com/rt-net/raspimouse_ros_exapmles)
 
 Raspberry Pi MouseのROSサンプルコード集です。
 
