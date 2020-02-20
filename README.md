@@ -51,8 +51,37 @@ source devel.setup.bash
 
 ## How To Use Examples
 
+- [keyboard_control](#keyboard_control)
 - [joystick_control](#joystick_control)
 - [object_tracking](#object_tracking)
+
+---
+
+### keyboard_control
+
+[teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard)を使ってRaspberryPiMouseを動かします。
+
+#### Requirements 
+
+- Keyboard
+
+#### How to use
+
+次のコマンドでノードを起動します。
+
+```sh
+roslaunch raspimouse_ros_examples teleop.launch key:=true
+
+# Control from remote computer
+roslaunch raspimouse_ros_examples teleop.launch key:=true mouse:=false
+```
+
+ノードが起動したら`/motor_on`サービスをコールします。
+
+```sh
+rosservice call /motor_on
+```
+[back to example list](#how-to-use-examples)
 
 ---
 
@@ -98,6 +127,7 @@ button_motor_on         : 9
 
 button_cmd_enable       : 4
 ```
+[back to example list](#how-to-use-examples)
 
 --- 
 
@@ -172,3 +202,4 @@ roslaunch raspimouse_ros_examples pimouse_object_tracking.launch
         max_hsv_orange = np.array([20, 255, 255])
         return min_hsv_orange, max_hsv_orange
 ```
+[back to example list](#how-to-use-examples)
