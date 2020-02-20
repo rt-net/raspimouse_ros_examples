@@ -100,13 +100,13 @@ rosservice call /motor_on
 次のコマンドでノードを起動します。
 
 ```sh
-roslaunch raspimouse_ros_examples joystick_control.launch
+roslaunch raspimouse_ros_examples teleop.launch joy:=true
 
 # Use DUALSHOCK 3
-roslaunch raspimouse_ros_examples joystick_control.launch config:="dualshock3" 
+roslaunch raspimouse_ros_examples teleop.launch joy:=true joyconfig:="dualshock3" 
 
 # Control from remote computer
-roslaunch raspimouse_ros_examples joystick_control.launch mouse:=false
+roslaunch raspimouse_ros_examples teleop.launch joy:=true mouse:=false
 ```
 
 デフォルトのキー割り当てはこちらです。
