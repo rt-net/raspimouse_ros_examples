@@ -1,12 +1,12 @@
 [English](README.en.md) | [日本語](README.md)
 
-# raspimouse_ros_exapmles
+# raspimouse_ros_examples
 
 [![Build Status](https://travis-ci.com/rt-net/raspimouse_ros_exapmles.svg?token=44UfTwwGaAupMGxC2ZWA&branch=master)](https://travis-ci.com/rt-net/raspimouse_ros_exapmles)
 
 Raspberry Pi MouseのROSサンプルコード集です。
 
-![raspberry_pi_mouse](https://github.com/rt-net/raspimouse_ros_exapmles/blob/images/raspberry_pi_mouse.JPG)
+![raspberry_pi_mouse](https://github.com/rt-net/raspimouse_ros_examples/blob/images/raspberry_pi_mouse.JPG)
 
 ## Requirements
 
@@ -34,7 +34,7 @@ Raspberry Pi MouseのROSサンプルコード集です。
 cd ~/catkin_ws/src
 # Clone ROS packages
 git clone https://github.com/ryuichiueda/raspimouse_ros_2
-git clone https://github.com/rt-net/raspimouse_ros_exapmles 
+git clone https://github.com/rt-net/raspimouse_ros_examples 
 
 # Install dependencies
 rosdep install -r -y --from-paths . --ignore-src      
@@ -51,8 +51,37 @@ source devel.setup.bash
 
 ## How To Use Examples
 
+- [keyboard_control](#keyboard_control)
 - [joystick_control](#joystick_control)
 - [object_tracking](#object_tracking)
+
+---
+
+### keyboard_control
+
+[teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard)を使ってRaspberryPiMouseを動かします。
+
+#### Requirements 
+
+- Keyboard
+
+#### How to use
+
+次のコマンドでノードを起動します。
+
+```sh
+roslaunch raspimouse_ros_examples teleop.launch key:=true
+
+# Control from remote computer
+roslaunch raspimouse_ros_examples teleop.launch key:=true mouse:=false
+```
+
+ノードが起動したら`/motor_on`サービスをコールします。
+
+```sh
+rosservice call /motor_on
+```
+[back to example list](#how-to-use-examples)
 
 ---
 
@@ -71,13 +100,13 @@ source devel.setup.bash
 次のコマンドでノードを起動します。
 
 ```sh
-roslaunch raspimouse_ros_examples joystick_control.launch
+roslaunch raspimouse_ros_examples teleop.launch joy:=true
 
 # Use DUALSHOCK 3
-roslaunch raspimouse_ros_examples joystick_control.launch config:="dualshock3" 
+roslaunch raspimouse_ros_examples teleop.launch joy:=true joyconfig:="dualshock3" 
 
 # Control from remote computer
-roslaunch raspimouse_ros_examples joystick_control.launch mouse:=false
+roslaunch raspimouse_ros_examples teleop.launch joy:=true mouse:=false
 ```
 
 デフォルトのキー割り当てはこちらです。
@@ -98,6 +127,7 @@ button_motor_on         : 9
 
 button_cmd_enable       : 4
 ```
+[back to example list](#how-to-use-examples)
 
 --- 
 
@@ -172,3 +202,4 @@ roslaunch raspimouse_ros_examples pimouse_object_tracking.launch
         max_hsv_orange = np.array([20, 255, 255])
         return min_hsv_orange, max_hsv_orange
 ```
+[back to example list](#how-to-use-examples)
