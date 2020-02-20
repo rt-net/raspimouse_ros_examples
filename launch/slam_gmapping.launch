@@ -1,14 +1,5 @@
 <launch>
-  <arg name="mouse" default="true" />
-  <arg name="joydev" default="/dev/input/js0" />
-  <arg name="config" default="f710" />
   <arg name="rviz_config" default="$(find raspimouse_ros_examples)/rviz/slam.rviz" />
-
-  <include file="$(find raspimouse_ros_examples)/launch/joystick_control.launch">
-    <arg name="mouse" value="false" />
-    <arg name="joydev" value="$(arg joydev)" />
-    <arg name="config" value="$(arg config)" />
-  </include>
 
   <node pkg="gmapping" type="slam_gmapping" name="raspimouse_slam_gmapping" output="screen">
     <!-- <remap from="scan" to="base_scan"/> -->
@@ -44,6 +35,9 @@
     <!-- <param name="lasamplerange" value="0.005"/> -->
     <!-- <param name="lasamplestep" value="0.005"/>  -->
   </node>
+
+  <node pkg="tf" type="static_transform_publisher" name="laser_broadcaster" args="0 0 0.01 0 0 0 1 base_link laser 100" />
+
   <node name="rviz" pkg="rviz" type="rviz" respawn="false"
     args="-d $(arg rviz_config)" output="screen" />
 
