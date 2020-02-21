@@ -1,0 +1,8 @@
+<launch>
+  <arg name="port" default="/dev/ttyACM0" />
+  <include file="$(find raspimouse_ros_2)/launch/raspimouse.launch" />
+
+  <node name="urg_node" pkg="urg_node" type="urg_node" required="true">
+    <param name="serial_port" value="$(arg port)"/>
+  </node>
+</launch>
