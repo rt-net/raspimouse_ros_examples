@@ -54,6 +54,7 @@ source devel.setup.bash
 - [keyboard_control](#keyboard_control)
 - [joystick_control](#joystick_control)
 - [object_tracking](#object_tracking)
+- [SLAM](SLAM)
 
 ---
 
@@ -201,5 +202,74 @@ roslaunch raspimouse_ros_examples pimouse_object_tracking.launch
         min_hsv_orange = np.array([15, 150, 40])
         max_hsv_orange = np.array([20, 255, 255])
         return min_hsv_orange, max_hsv_orange
+```
+[back to example list](#how-to-use-examples)
+
+--- 
+
+### SLAM
+
+![slam_gmapping](https://github.com/rt-net/raspimouse_ros_examples/blob/images/slam_gmapping.png)
+
+LiDARを使ってSLAM（自己位置推定と地図作成）を行うサンプルです。
+
+#### Requirements 
+
+- LiDAR
+  - [URG-04LX-UG01](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_1296&products_id=2816)
+- URGマウント
+  - [Raspberry Pi Mouse オプションキット No.2 \[URGマウント\]](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3517)
+- Joystick Controller (Optional)
+  
+#### Installation
+
+Raspberry Pi MouseにURGマウントを取り付け、URGをRaspberry Piに接続します。
+
+#### How to use
+
+Raspberry Pi Mouse上で次のコマンドでノードを起動します。
+
+```sh
+# Raspberry Pi Mouse
+roslaunch raspimouse_ros_examples mouse_with_lidar.launch
+```
+
+Raspberry Pi Mouseを動かすため`teleop.launch`を起動します
+
+```sh
+# joystick control from Remote Computer
+roslaunch raspimouse_ros_examples teleop.launch mouse:=false joy:=true joyconfig:=dualshock3
+```
+
+次のコマンドでSLAMパッケージを起動します。（Remote computerでの実行推奨）
+
+```sh
+roslaunch raspimouse_ros_examples slam_gmapping.launch
+```
+
+Raspberry Pi Mouseを動かして地図を作成します。
+
+次のコマンドで作成した地図を保存します。
+
+```sh
+mkdir ~/maps
+rosrun map_server map_saver -f ~/maps/mymap
+```
+
+#### Configure
+
+[./launch/slam_gmapping.launch](./launch/slam_gmapping.launch)で[gmapping](http://wiki.ros.org/gmapping)パッケージのパラメータを調整します。
+
+```xml
+  <node pkg="gmapping" type="slam_gmapping" name="raspimouse_slam_gmapping" output="screen">
+    <!-- <remap from="scan" to="base_scan"/> -->
+    <param name="base_frame" value="base_link" />
+    <param name="odom_frame" value="odom" />
+    <param name="map_frame"  value="map" />
+    <param name="map_update_interval" value="1.0"/>
+    <param name="maxUrange" value="5.6"/>
+    <!-- <param name="sigma" value="0.05"/> -->
+    <!-- <param name="kernelSize" value="1"/> -->
+    <!-- <param name="lstep" value="0.05"/> -->
 ```
 [back to example list](#how-to-use-examples)
