@@ -225,6 +225,8 @@ LiDARを使ってSLAM（自己位置推定と地図作成）を行うサンプ�
 
 Raspberry Pi MouseにURGマウントを取り付け、URGをRaspberry Piに接続します。
 
+![mouse_with_urg](https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_urg.JPG)
+
 #### How to use
 
 Raspberry Pi Mouse上で次のコマンドでノードを起動します。
@@ -237,7 +239,7 @@ roslaunch raspimouse_ros_examples mouse_with_lidar.launch
 Raspberry Pi Mouseを動かすため`teleop.launch`を起動します
 
 ```sh
-# joystick control from Remote Computer
+# joystick control
 roslaunch raspimouse_ros_examples teleop.launch mouse:=false joy:=true joyconfig:=dualshock3
 ```
 
