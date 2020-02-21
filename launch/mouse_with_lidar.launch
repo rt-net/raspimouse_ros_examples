@@ -5,7 +5,7 @@
   <arg name="port" default="/dev/ttyACM0" />
   <arg name="frame_id" default="laser" />
 
-  <!-- <include file="$(find raspimouse_ros_2)/launch/raspimouse.launch" /> -->
+  <include file="$(find raspimouse_ros_2)/launch/raspimouse.launch" />
 
   <group if="$(arg urg)">
     <node name="lidar_node" pkg="urg_node" type="urg_node" required="true">
