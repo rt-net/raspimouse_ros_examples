@@ -5,8 +5,6 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Status1
-        - /Odometry1
         - /Odometry1/Shape1
       Splitter Ratio: 0.5
     Tree Height: 759
@@ -112,7 +110,7 @@ Visualization Manager:
           Value: true
         Value: true
       Enabled: true
-      Keep: 50
+      Keep: 10
       Name: Odometry
       Position Tolerance: 0.10000000149011612
       Shape:
