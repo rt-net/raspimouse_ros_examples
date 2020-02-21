@@ -23,6 +23,7 @@
   <exec_depend>urg_node</exec_depend>
   <exec_depend>tf</exec_depend>
   <exec_depend>map_server</exec_depend>
+  <exec_depend>rplidar_ros</exec_depend>
 
   <export>
   </export>

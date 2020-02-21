@@ -1,8 +1,22 @@
 <launch>
-  <arg name="port" default="/dev/ttyACM0" />
-  <include file="$(find raspimouse_ros_2)/launch/raspimouse.launch" />
+  <arg name="urg" default="false" />
+  <arg name="rplidar" default="false" />
 
-  <node name="urg_node" pkg="urg_node" type="urg_node" required="true">
-    <param name="serial_port" value="$(arg port)"/>
-  </node>
+  <arg name="port" default="/dev/ttyACM0" />
+  <arg name="frame_id" default="laser" />
+
+  <!-- <include file="$(find raspimouse_ros_2)/launch/raspimouse.launch" /> -->
+
+  <group if="$(arg urg)">
+    <node name="lidar_node" pkg="urg_node" type="urg_node" required="true">
+      <param name="serial_port" value="$(arg port)"/>
+    </node>
+  </group>
+
+  <group if="$(arg rplidar)">
+    <node name="lidar_node" pkg="rplidar_ros" type="rplidarNode" required="true">
+      <param name="serial_port" value="$(arg port)"/>
+      <param name="frame_id" value="$(arg frame_id)"/>
+    </node>
+  </group>
 </launch>
