@@ -1,5 +1,7 @@
 <launch>
   <arg name="rviz_config" default="$(find raspimouse_ros_examples)/rviz/slam.rviz" />
+  <arg name="urg" default="false" />
+  <arg name="rplidar" default="false" />
 
   <node pkg="gmapping" type="slam_gmapping" name="raspimouse_slam_gmapping" output="screen">
     <!-- <remap from="scan" to="base_scan"/> -->
@@ -7,7 +9,8 @@
     <param name="odom_frame" value="odom" />
     <param name="map_frame"  value="map" />
     <param name="map_update_interval" value="1.0"/>
-    <param name="maxUrange" value="5.6"/>
+    <param name="maxUrange" value="5.6" if="$(arg urg)"/>
+    <param name="maxUrange" value="12" if="$(arg rplidar)"/>
     <!-- <param name="sigma" value="0.05"/> -->
     <!-- <param name="kernelSize" value="1"/> -->
     <!-- <param name="lstep" value="0.05"/> -->
@@ -36,7 +39,13 @@
     <!-- <param name="lasamplestep" value="0.005"/>  -->
   </node>
 
-  <node pkg="tf" type="static_transform_publisher" name="laser_broadcaster" args="0 0 0.01 0 0 0 1 base_link laser 100" />
+  <group if="$(arg urg)">
+    <node pkg="tf" type="static_transform_publisher" name="laser_broadcaster" args="0 0 0.01 0 0 0 base_link laser 100" />
+  </group>
+
+  <group if="$(arg rplidar)">
+    <node pkg="tf" type="static_transform_publisher" name="laser_broadcaster" args="0 0 0.01 0 3.14 3.14 base_link laser 100" />
+  </group>
 
   <node name="rviz" pkg="rviz" type="rviz" respawn="false"
     args="-d $(arg rviz_config)" output="screen" />
