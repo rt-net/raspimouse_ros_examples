@@ -54,7 +54,7 @@ source devel.setup.bash
 - [keyboard_control](#keyboard_control)
 - [joystick_control](#joystick_control)
 - [object_tracking](#object_tracking)
-- [SLAM](SLAM)
+- [SLAM](#SLAM)
 
 ---
 
