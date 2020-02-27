@@ -53,6 +53,7 @@ This repository is licensed under the Apache 2.0, see [LICENSE](./LICENSE) for d
 - [keyboard_control](#keyboard_control)
 - [joystick_control](#joystick_control)
 - [object_tracking](#object_tracking)
+- [line_trace](#line_trace)
 - [SLAM](#SLAM)
 
 ---
@@ -199,6 +200,51 @@ If object tracking is unstable, please edit the following lines.
         max_hsv_orange = np.array([20, 255, 255])
         return min_hsv_orange, max_hsv_orange
 ```
+[back to example list](#how-to-use-examples)
+
+--- 
+
+### line_trace
+
+![mouse_with_line_trace_sensor](https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_line_trace_sensor.JPG)
+
+This is an example for line tracing.
+
+#### Requirements
+
+- Line tracing sensor
+  - [Raspberry Pi Mouse Option kit No.3 \[Line trace\]](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3591&language=en)
+- Field and lines for tracing (Optional)
+
+#### Installation
+
+Install a line tracing sensor unit to Raspberry Pi Mouse.
+
+#### How to use
+
+Launch nodes with the following command:
+
+```sh
+roslaunch raspimouse_ros_examples line_trace.launch
+
+# Control from remote computer
+roslaunch raspimouse_ros_examples line_trace.launch mouse:=false
+```
+
+Next, place Raspberry Pi Mouse on a field and press SW2 to sample sensor values on the field.
+
+![field_calibration](https://github.com/rt-net/raspimouse_ros_examples/blob/images/field_calibration.JPG)
+
+Then, place Raspberry Pi Mouse to detect a line and press SW1 to sample sensor values on the line.
+
+![line_calibration](https://github.com/rt-net/raspimouse_ros_examples/blob/images/line_calibration.JPG)
+
+Last, place Raspberry Pi Mouse on the line and press SW0 to start line tracing.
+
+![start_trace](https://github.com/rt-net/raspimouse_ros_examples/blob/images/start_trace.JPG)
+
+Press SW0 again to stop the tracing.
+
 [back to example list](#how-to-use-examples)
 
 --- 
