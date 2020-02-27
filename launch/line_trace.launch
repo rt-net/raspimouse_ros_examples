@@ -1,0 +1,9 @@
+<launch>
+  <arg name="mouse" default="true" />
+
+  <group if="$(arg mouse)">
+    <include file="$(find raspimouse_ros_2)/launch/raspimouse.launch" />
+  </group>
+
+  <node name="line_trace" pkg="raspimouse_ros_examples" type="line_trace.py" output="screen" />
+</launch>
