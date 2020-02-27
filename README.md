@@ -54,7 +54,7 @@ source devel.setup.bash
 - [keyboard_control](#keyboard_control)
 - [joystick_control](#joystick_control)
 - [object_tracking](#object_tracking)
-- [line_trace](#line_trace)
+- [line_tracing](#line_tracing)
 - [SLAM](#SLAM)
 
 ---
@@ -208,7 +208,7 @@ roslaunch raspimouse_ros_examples pimouse_object_tracking.launch
 
 --- 
 
-### line_trace
+### line_tracing
 
 ![mouse_with_line_trace_sensor](https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_line_trace_sensor.JPG)
 
