@@ -54,6 +54,7 @@ source devel.setup.bash
 - [keyboard_control](#keyboard_control)
 - [joystick_control](#joystick_control)
 - [object_tracking](#object_tracking)
+- [line_trace](#line_trace)
 - [SLAM](#SLAM)
 
 ---
@@ -203,6 +204,52 @@ roslaunch raspimouse_ros_examples pimouse_object_tracking.launch
         max_hsv_orange = np.array([20, 255, 255])
         return min_hsv_orange, max_hsv_orange
 ```
+[back to example list](#how-to-use-examples)
+
+--- 
+
+### line_trace
+
+![mouse_with_line_trace_sensor](https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_line_trace_sensor.JPG)
+
+ライントレースのコード例です。
+
+#### Requirements
+
+- ライントレースセンサ
+  - [Raspberry Pi Mouse オプションキット No.3 \[ライントレース\]](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3591)
+- フィールドとライン (Optional)
+
+#### Installation
+
+Raspberry Pi Mouseにライントレースセンサを取り付けます。
+
+
+#### How to use
+
+次のコマンドでノードを起動します。
+
+```sh
+roslaunch raspimouse_ros_examples line_trace.launch
+
+# Control from remote computer
+roslaunch raspimouse_ros_examples line_trace.launch mouse:=false
+```
+
+Raspberry Pi Mouseをフィールドに置き、SW2を押してフィールド上のセンサ値をキャリブレーションします。
+
+![field_calibration](https://github.com/rt-net/raspimouse_ros_examples/blob/images/field_calibration.JPG)
+
+次に、センサとラインが重なるようにRaspberry Pi Mouseを置き、SW1を押してライン上のセンサ値をキャリブレーションします。
+
+![line_calibration](https://github.com/rt-net/raspimouse_ros_examples/blob/images/line_calibration.JPG)
+
+最後に、ライン上にRaspberry Pi Mouseを置き、SW0を押してライントレースを開始します。
+
+![start_trace](https://github.com/rt-net/raspimouse_ros_examples/blob/images/start_trace.JPG)
+
+もう一度SW0を押すとライントレースを停止します。
+
 [back to example list](#how-to-use-examples)
 
 --- 
