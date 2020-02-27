@@ -236,11 +236,11 @@ roslaunch raspimouse_ros_examples line_trace.launch
 roslaunch raspimouse_ros_examples line_trace.launch mouse:=false
 ```
 
-Raspberry Pi Mouseをフィールドに置き、SW2を押してフィールド上のセンサ値をキャリブレーションします。
+Raspberry Pi Mouseをフィールドに置き、SW2を押してフィールド上のセンサ値をサンプリングします。
 
 ![field_calibration](https://github.com/rt-net/raspimouse_ros_examples/blob/images/field_calibration.JPG)
 
-次に、センサとラインが重なるようにRaspberry Pi Mouseを置き、SW1を押してライン上のセンサ値をキャリブレーションします。
+次に、センサとラインが重なるようにRaspberry Pi Mouseを置き、SW1を押してライン上のセンサ値をサンプリングします。
 
 ![line_calibration](https://github.com/rt-net/raspimouse_ros_examples/blob/images/line_calibration.JPG)
 
