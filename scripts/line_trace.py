@@ -20,8 +20,8 @@ class LineTracer(object):
         self._line_is_detected_by_sensor = dict(self._SENSORS)
         self._present_sensor_values = dict(self._SENSORS)
 
-        self._line_is_calibrated = False
-        self._field_is_calibrated = False
+        self._line_values_are_sampled = False
+        self._field_values_are_sampled = False
         self._can_publish_cmdvel = False
 
         self._mouse_buttons = ButtonValues()
@@ -70,7 +70,7 @@ class LineTracer(object):
         self._present_sensor_values["mid_right"] = msg.left_side
         self._present_sensor_values["right"] = msg.left_forward
 
-        if self._calibration_is_done():
+        if self._sampling_is_done():
             self._update_line_detection()
 
 
@@ -106,8 +106,8 @@ class LineTracer(object):
             rospy.sleep(0.1)
 
 
-    def _calibration_is_done(self):
-        if self._line_is_calibrated and self._field_is_calibrated:
+    def _sampling_is_done(self):
+        if self._line_values_are_sampled and self._field_values_are_sampled:
             return True
         else:
             return False
@@ -130,7 +130,7 @@ class LineTracer(object):
 
 
     def _set_line_thresholds(self):
-        if not self._calibration_is_done():
+        if not self._sampling_is_done():
             return
 
         for key in self._SENSORS:
@@ -158,23 +158,23 @@ class LineTracer(object):
         return sensor_values
 
 
-    def _line_calibration(self):
+    def _line_sampling(self):
         self._beep_start()
         self._sensor_line_values = self._get_multisampled_sensor_values()
         self._beep_success()
 
         rospy.loginfo(self._sensor_line_values)
-        self._line_is_calibrated = True
+        self._line_values_are_sampled = True
         self._set_line_thresholds()
 
 
-    def _filed_calibration(self):
+    def _filed_sampling(self):
         self._beep_start()
         self._sensor_field_values = self._get_multisampled_sensor_values()
         self._beep_success()
 
         rospy.loginfo(self._sensor_field_values)
-        self._field_is_calibrated = True
+        self._field_values_are_sampled = True
         self._set_line_thresholds()
 
 
@@ -215,7 +215,7 @@ class LineTracer(object):
 
     def update(self):
         if self._mouse_buttons.front: # SW0 of Raspberry Pi Mouse
-            if self._calibration_is_done() and self._can_publish_cmdvel is False:
+            if self._sampling_is_done() and self._can_publish_cmdvel is False:
                 rospy.loginfo("start trace")
                 self._motor_on()
                 self._beep_success()
@@ -227,12 +227,12 @@ class LineTracer(object):
                 self._can_publish_cmdvel = False
 
         elif self._mouse_buttons.mid: # SW1
-            rospy.loginfo("line calibration:")
-            self._line_calibration()
+            rospy.loginfo("line sampling:")
+            self._line_sampling()
 
         elif self._mouse_buttons.rear: # SW2
-            rospy.loginfo("field calibration:")
-            self._filed_calibration()
+            rospy.loginfo("field sampling:")
+            self._filed_sampling()
 
         if self._can_publish_cmdvel:
             self._publish_cmdvel_for_line_trace()
