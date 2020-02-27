@@ -245,6 +245,19 @@ Last, place Raspberry Pi Mouse on the line and press SW0 to start line tracing.
 
 Press SW0 again to stop the tracing.
 
+#### Configure
+
+Edit [`./scripts/line_tracing.py`](./scripts/line_tracing.py) to change a velocity command.
+
+```python
+    def _publish_cmdvel_for_line_trace(self):
+        VEL_LINER_X = 0.08 # m/s
+        VEL_ANGULAR_Z = 0.8 # rad/s
+        LOW_VEL_ANGULAR_Z = 0.5 # rad/s
+
+        cmd_vel = Twist()
+```
+
 [back to example list](#how-to-use-examples)
 
 --- 

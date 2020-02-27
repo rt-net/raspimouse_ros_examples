@@ -250,6 +250,19 @@ Raspberry Pi Mouseをフィールドに置き、SW2を押してフィールド�
 
 もう一度SW0を押すとライントレースを停止します。
 
+#### Configure
+
+走行速度を変更するには[`./scripts/line_tracing.py`](./scripts/line_tracing.py)を編集します。
+
+```python
+    def _publish_cmdvel_for_line_trace(self):
+        VEL_LINER_X = 0.08 # m/s
+        VEL_ANGULAR_Z = 0.8 # rad/s
+        LOW_VEL_ANGULAR_Z = 0.5 # rad/s
+
+        cmd_vel = Twist()
+```
+
 [back to example list](#how-to-use-examples)
 
 --- 
