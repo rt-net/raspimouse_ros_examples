@@ -241,7 +241,7 @@ class LineTracer(object):
 
 
 def main():
-    rospy.init_node('line_trace')
+    rospy.init_node('line_tracing')
 
     line_tracer = LineTracer()
 

@@ -5,5 +5,5 @@
     <include file="$(find raspimouse_ros_2)/launch/raspimouse.launch" />
   </group>
 
-  <node name="line_trace" pkg="raspimouse_ros_examples" type="line_trace.py" output="screen" />
+  <node name="line_tracing" pkg="raspimouse_ros_examples" type="line_tracing.py" output="screen" />
 </launch>

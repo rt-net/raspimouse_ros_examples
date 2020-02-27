@@ -230,10 +230,10 @@ Raspberry Pi Mouseにライントレースセンサを取り付けます。
 次のコマンドでノードを起動します。
 
 ```sh
-roslaunch raspimouse_ros_examples line_trace.launch
+roslaunch raspimouse_ros_examples line_tracing.launch
 
 # Control from remote computer
-roslaunch raspimouse_ros_examples line_trace.launch mouse:=false
+roslaunch raspimouse_ros_examples line_tracing.launch mouse:=false
 ```
 
 Raspberry Pi Mouseをフィールドに置き、SW2を押してフィールド上のセンサ値をサンプリングします。

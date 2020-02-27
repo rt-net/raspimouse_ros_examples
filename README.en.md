@@ -225,10 +225,10 @@ Install a line tracing sensor unit to Raspberry Pi Mouse.
 Launch nodes with the following command:
 
 ```sh
-roslaunch raspimouse_ros_examples line_trace.launch
+roslaunch raspimouse_ros_examples line_tracing.launch
 
 # Control from remote computer
-roslaunch raspimouse_ros_examples line_trace.launch mouse:=false
+roslaunch raspimouse_ros_examples line_tracing.launch mouse:=false
 ```
 
 Next, place Raspberry Pi Mouse on a field and press SW2 to sample sensor values on the field.
