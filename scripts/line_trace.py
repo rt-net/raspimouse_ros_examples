@@ -46,8 +46,8 @@ class LineTracer(object):
 
 
     def _on_shutdown(self):
-        self._motor_off()
         self._pub_leds.publish(LedValues())
+        self._motor_off()
 
 
     def _motor_on(self):
