@@ -14,17 +14,16 @@ from raspimouse_ros_2.msg import LedValues
 class LineTracer(object):
     def __init__(self):
         self._SENSORS = {"left":0, "mid_left":0, "mid_right":0, "right":0}
-        self._line_cal_value = dict(self._SENSORS)
-        self._field_cal_value = dict(self._SENSORS)
-        self._sensor_threshold = dict(self._SENSORS)
-        self._sensor_on_line = dict(self._SENSORS)
-        self._line_is_bright = False
+        self._sensor_line_values = dict(self._SENSORS)
+        self._sensor_field_values = dict(self._SENSORS)
+        self._line_thresholds = dict(self._SENSORS)
+        self._line_is_detected_by_sensor = dict(self._SENSORS)
+        self._present_sensor_values = dict(self._SENSORS)
+
         self._line_is_calibrated = False
         self._field_is_calibrated = False
+        self._can_publish_cmdvel = False
 
-        self._tracing = False
-
-        self._lightsensor = dict(self._SENSORS)
         self._mouse_buttons = ButtonValues()
 
         self._pub_cmdvel = rospy.Publisher('cmd_vel', Twist, queue_size=1)
@@ -35,6 +34,7 @@ class LineTracer(object):
                 self._callback_lightsensor, queue_size=1)
         self._sub_buttons = rospy.Subscriber('buttons', ButtonValues,
                 self._callback_buttons, queue_size=1)
+
         try:
             rospy.wait_for_service("motor_on", timeout=5)
             rospy.wait_for_service("motor_off", timeout=5)
@@ -47,33 +47,7 @@ class LineTracer(object):
 
     def _on_shutdown(self):
         self._motor_off()
-        led_values = LedValues()
-        self._pub_leds.publish(led_values)
-
-
-    def _callback_lightsensor(self, msg):
-        self._lightsensor["left"] = msg.right_forward
-        self._lightsensor["mid_left"] = msg.right_side
-        self._lightsensor["mid_right"] = msg.left_side
-        self._lightsensor["right"] = msg.left_forward
-
-
-        if self._calibration_is_done():
-            self._update_sensor_on_line_status()
-
-
-    def _update_sensor_on_line_status(self):
-        for key in self._SENSORS:
-            is_positive = self._lightsensor[key] > self._sensor_threshold[key]
-
-            if self._line_is_bright == is_positive:
-                self._sensor_on_line[key] = True
-            else:
-                self._sensor_on_line[key] = False
-
-
-    def _callback_buttons(self, msg):
-        self._mouse_buttons = msg
+        self._pub_leds.publish(LedValues())
 
 
     def _motor_on(self):
@@ -85,6 +59,31 @@ class LineTracer(object):
         rospy.loginfo("motor_off")
 
 
+    def _callback_buttons(self, msg):
+        self._mouse_buttons = msg
+
+
+    def _callback_lightsensor(self, msg):
+        # The order of front distance sensors and line trace sensors is not same
+        self._present_sensor_values["left"] = msg.right_forward
+        self._present_sensor_values["mid_left"] = msg.right_side
+        self._present_sensor_values["mid_right"] = msg.left_side
+        self._present_sensor_values["right"] = msg.left_forward
+
+        if self._calibration_is_done():
+            self._update_line_detection()
+
+
+    def _update_line_detection(self):
+        for key in self._SENSORS:
+            is_positive = self._present_sensor_values[key] > self._line_thresholds[key]
+
+            if self._line_is_bright() == is_positive:
+                self._line_is_detected_by_sensor[key] = True
+            else:
+                self._line_is_detected_by_sensor[key] = False
+
+
     def _beep_buzzer(self, freq, beep_time=0):
         self._pub_buzzer.publish(freq)
         rospy.sleep(beep_time)
@@ -94,10 +93,12 @@ class LineTracer(object):
     def _beep_start(self):
         self._beep_buzzer(1000, 0.5)
 
+
     def _beep_success(self):
         self._beep_buzzer(1000, 0.1)
         rospy.sleep(0.1)
         self._beep_buzzer(1000, 0.1)
+
 
     def _beep_failure(self):
         for i in range(4):
@@ -120,133 +121,123 @@ class LineTracer(object):
             return sensor2 + diff * 0.5
 
 
-    def _set_threshold(self):
+    def _line_is_bright(self):
+        SAMPLE = "right"
+        if self._sensor_line_values[SAMPLE] > self._sensor_field_values[SAMPLE]:
+            return True
+        else:
+            return False
+
+
+    def _set_line_thresholds(self):
         if not self._calibration_is_done():
             return
 
-        if self._line_cal_value["right"] > self._field_cal_value["right"]:
-            self._line_is_bright = True
-        else:
-            self._line_is_bright = False
-
         for key in self._SENSORS:
-            self._sensor_threshold[key] = self._median(
-                    self._line_cal_value[key], 
-                        self._field_cal_value[key])
+            self._line_thresholds[key] = self._median(
+                    self._sensor_line_values[key], 
+                    self._sensor_field_values[key])
 
-        rospy.loginfo("threshold:" + str(self._sensor_threshold))
+        rospy.loginfo("thresholds:" + str(self._line_thresholds))
 
 
-    def _calibration(self):
-        NUM_OF_SAMPLES = 100
-        WAIT_TIME = 0.01 # sec
+    def _get_multisampled_sensor_values(self):
+        NUM_OF_SAMPLES = 10
+        WAIT_TIME = 0.1 # sec
 
-        sum_sensor_value = dict(self._SENSORS)
+        # Multisampling
+        sensor_values = dict(self._SENSORS)
         for i in range(NUM_OF_SAMPLES):
             for key in self._SENSORS:
-                sum_sensor_value[key] += self._lightsensor[key]
+                sensor_values[key] += self._present_sensor_values[key]
             rospy.sleep(WAIT_TIME)
 
-        sensor_value = dict(self._SENSORS)
         for key in self._SENSORS:
-            sensor_value[key] = sum_sensor_value[key] / NUM_OF_SAMPLES
+            sensor_values[key] /= NUM_OF_SAMPLES
 
-        return sensor_value
+        return sensor_values
 
 
     def _line_calibration(self):
         self._beep_start()
-        self._line_cal_value = self._calibration()
+        self._sensor_line_values = self._get_multisampled_sensor_values()
         self._beep_success()
-        rospy.loginfo(self._line_cal_value)
+
+        rospy.loginfo(self._sensor_line_values)
         self._line_is_calibrated = True
-        self._set_threshold()
+        self._set_line_thresholds()
 
 
     def _filed_calibration(self):
         self._beep_start()
-        self._field_cal_value = self._calibration()
+        self._sensor_field_values = self._get_multisampled_sensor_values()
         self._beep_success()
-        rospy.loginfo(self._field_cal_value)
+
+        rospy.loginfo(self._sensor_field_values)
         self._field_is_calibrated = True
-        self._set_threshold()
+        self._set_line_thresholds()
 
 
-    def _indicate_lines(self):
+    def _indicate_line_detections(self):
         led_values = LedValues()
 
-        if self._sensor_on_line["right"]:
-            led_values.right_side = True
-
-        if self._sensor_on_line["mid_right"]:
-            led_values.right_forward = True
-
-        if self._sensor_on_line["mid_left"]:
-            led_values.left_forward = True
-
-        if self._sensor_on_line["left"]:
-            led_values.left_side  = True
-
+        led_values.right_side = self._line_is_detected_by_sensor["right"]
+        led_values.right_forward = self._line_is_detected_by_sensor["mid_right"]
+        led_values.left_forward = self._line_is_detected_by_sensor["mid_left"]
+        led_values.left_side = self._line_is_detected_by_sensor["left"]
         self._pub_leds.publish(led_values)
 
 
-    def _pub_trace_cmdvel(self):
+    def _publish_cmdvel_for_line_trace(self):
         VEL_LINER_X = 0.08 # m/s
         VEL_ANGULAR_Z = 0.8 # rad/s
-        SMALL_VEL_ANGULAR_Z = 0.5 # rad/s
-
-        some_sensors_on_line = False
-        all_sensors_on_line = True
-        for key in self._SENSORS:
-            if self._sensor_on_line[key]:
-                if some_sensors_on_line is False:
-                    some_sensors_on_line = True
-            else:
-                all_sensors_on_line = False
+        LOW_VEL_ANGULAR_Z = 0.5 # rad/s
 
         cmd_vel = Twist()
-        if some_sensors_on_line is True and all_sensors_on_line is False:
+        if not all(self._line_is_detected_by_sensor.values()) and\
+                any(self._line_is_detected_by_sensor.values()):
             cmd_vel.linear.x = VEL_LINER_X
 
-            if self._sensor_on_line["left"]:
+            if self._line_is_detected_by_sensor["left"]:
                 cmd_vel.angular.z += VEL_ANGULAR_Z
 
-            if self._sensor_on_line["right"]:
+            if self._line_is_detected_by_sensor["right"]:
                 cmd_vel.angular.z -= VEL_ANGULAR_Z
 
-            if self._sensor_on_line["mid_left"]:
-                cmd_vel.angular.z += SMALL_VEL_ANGULAR_Z
+            if self._line_is_detected_by_sensor["mid_left"]:
+                cmd_vel.angular.z += LOW_VEL_ANGULAR_Z
 
-            if self._sensor_on_line["mid_right"]:
-                cmd_vel.angular.z -= SMALL_VEL_ANGULAR_Z
+            if self._line_is_detected_by_sensor["mid_right"]:
+                cmd_vel.angular.z -= LOW_VEL_ANGULAR_Z
 
         self._pub_cmdvel.publish(cmd_vel)
 
 
     def update(self):
-        if self._mouse_buttons.front:
-            if self._calibration_is_done() and self._tracing is False:
+        if self._mouse_buttons.front: # SW0 of Raspberry Pi Mouse
+            if self._calibration_is_done() and self._can_publish_cmdvel is False:
                 rospy.loginfo("start trace")
                 self._motor_on()
-                self._tracing = True
                 self._beep_success()
+                self._can_publish_cmdvel = True
             else:
                 rospy.loginfo("stop trace")
                 self._motor_off()
-                self._tracing = False
                 self._beep_failure()
+                self._can_publish_cmdvel = False
 
-        elif self._mouse_buttons.mid:
+        elif self._mouse_buttons.mid: # SW1
             rospy.loginfo("line calibration:")
             self._line_calibration()
-        elif self._mouse_buttons.rear:
+
+        elif self._mouse_buttons.rear: # SW2
             rospy.loginfo("field calibration:")
             self._filed_calibration()
 
-        if self._tracing:
-            self._pub_trace_cmdvel()
+        if self._can_publish_cmdvel:
+            self._publish_cmdvel_for_line_trace()
 
-        self._indicate_lines()
+        self._indicate_line_detections()
 
 
 def main():
