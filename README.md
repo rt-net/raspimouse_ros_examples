@@ -174,7 +174,7 @@ rosrun raspimouse_ros_examples camera.bash
 次のコマンドでノードを起動します。
 
 ```sh
-roslaunch raspimouse_ros_examples pimouse_object_tracking.launch
+roslaunch raspimouse_ros_examples object_tracking.launch
 ```
 
 \[Raspberry PiのローカルIPアドレス\]:8080でカメラから取得した画像や処理結果の確認が出来ます．
