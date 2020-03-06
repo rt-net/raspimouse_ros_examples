@@ -164,7 +164,7 @@ if __name__ == '__main__':
     rospy.sleep(3.)
     ot = ObjectTracker()
 
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(60)
     rate.sleep()
     while not rospy.is_shutdown():
         ot.image_processing()
