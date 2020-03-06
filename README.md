@@ -301,7 +301,7 @@ Raspberry Pi Mouse上で次のコマンドでノードを起動します。
 roslaunch raspimouse_ros_examples mouse_with_lidar.launch urg:=true port:=/dev/ttyACM0
 
 # RPLIDAR
-roslaunch raspimouse_ros_examples mouse_with_lidar.launch rplidar=true port:=/dev/ttyUSB0
+roslaunch raspimouse_ros_examples mouse_with_lidar.launch rplidar:=true port:=/dev/ttyUSB0
 ```
 
 Raspberry Pi Mouseを動かすため`teleop.launch`を起動します
