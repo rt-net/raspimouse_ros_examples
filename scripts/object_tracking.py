@@ -143,22 +143,20 @@ class ObjectTracker():
         self._monitor(centroid_img, self._pub_pbject_image)
 
     def control(self):
-        m = Twist()
-        # m.linear.x: speed parameter
-        # m.angular.z: angle parameter
+        cmd_vel = Twist()
         if self._detected_target():
             # Move backward and forward by difference from default area
             if self._object_is_smaller_than_default():
-                m.linear.x = 0.1
+                cmd_vel.linear.x = 0.1
                 print("forward")
             elif self._object_is_bigger_than_default():
-                m.linear.x = -0.1
+                cmd_vel.linear.x = -0.1
                 print("backward")
             else:
-                m.linear.x = 0
+                cmd_vel.linear.x = 0
                 print("stay")
-            m.angular.z = self._rot_vel()
-        self._pub_cmdvel.publish(m)
+            cmd_vel.angular.z = self._rot_vel()
+        self._pub_cmdvel.publish(cmd_vel)
 
 
 if __name__ == '__main__':
