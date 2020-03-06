@@ -296,7 +296,7 @@ Launch nodes on Raspberry Pi Mouse with the following command:
 roslaunch raspimouse_ros_examples mouse_with_lidar.launch urg:=true port:=/dev/ttyACM0
 
 # RPLIDAR
-roslaunch raspimouse_ros_examples mouse_with_lidar.launch rplidar=true port:=/dev/ttyUSB0
+roslaunch raspimouse_ros_examples mouse_with_lidar.launch rplidar:=true port:=/dev/ttyUSB0
 ```
 
 Next, launch `teleop.launch` to control Raspberry Pi Mouse with the following command:
