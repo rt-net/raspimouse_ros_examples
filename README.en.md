@@ -171,7 +171,7 @@ rosrun raspimouse_ros_examples camera.bash
 Then, launch nodes with the following command:
 
 ```sh
-roslaunch raspimouse_ros_examples pimouse_object_tracking.launch
+roslaunch raspimouse_ros_examples object_tracking.launch
 ```
 
 Browse \[IP address of Raspbery Pi Mouse\]:8080 to show a camera image and a tracking result.
