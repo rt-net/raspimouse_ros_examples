@@ -19,7 +19,6 @@ class ObjectTracker():
         self._captured_image = None
         self._object_pixels = 0 # Maximum area detected in the current image[pixel]
         self._object_pixels_default = 0 # Maximum area detected from the first image[pixel]
-        self._image_pixels = None # Total number of pixels[pixel]
 
         self._pub_binary_image = rospy.Publisher("binary", Image, queue_size=1)
         self._pub_pbject_image = rospy.Publisher("object", Image, queue_size=1)
@@ -38,16 +37,20 @@ class ObjectTracker():
         except CvBridgeError as e:
             rospy.logerr(e)
 
+    def _pixels(self, cv_image):
+        return cv_image.shape[0] * cv_image.shape[1]
 
     def _detected_target(self):
-        if self._image_pixels:
-            return self._object_pixels/self._image_pixels > ObjectTracker.LOWER_LIMIT
+        if not self._captured_image is None:
+            object_per_image = self._object_pixels / self._pixels(self._captured_image)
+            return object_per_image > ObjectTracker.LOWER_LIMIT
         else:
             return False
 
     def _object_pixels_ratio(self):
-        if self._image_pixels:
-            return (self._object_pixels - self._object_pixels_default) / self._image_pixels
+        if not self._captured_image is None:
+            diff_pixels = self._object_pixels - self._object_pixels_default
+            return diff_pixels / self._pixels(self._captured_image)
         else:
             return 0
 
@@ -136,7 +139,6 @@ class ObjectTracker():
         return rot
 
     def image_processing(self):
-        self._image_pixels = self._captured_image.shape[0] * self._captured_image.shape[1]
         object_binary_img = self._detect_ball()
         self._monitor(object_binary_img, self._pub_binary_image)
         centroid_img, self.point_centroid = self._detect_centroid(object_binary_img)
