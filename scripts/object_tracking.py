@@ -11,9 +11,6 @@ from std_srvs.srv import Trigger
 
 
 class ObjectTracker():
-    # Lower limit of the ratio of the detected area to the screen.
-    # Object tracking is not performed below this ratio.
-    LOWER_LIMIT = 0.01
 
     def __init__(self):
         self._cv_bridge = CvBridge()
@@ -43,9 +40,13 @@ class ObjectTracker():
         return cv_image.shape[0] * cv_image.shape[1]
 
     def _object_is_detected(self):
+        # Lower limit of the ratio of the detected area to the screen.
+        # Object tracking is not performed below this ratio.
+        LOWER_LIMIT = 0.01
+
         if not self._captured_image is None:
             object_per_image = self._object_pixels / self._pixels(self._captured_image)
-            return object_per_image > ObjectTracker.LOWER_LIMIT
+            return object_per_image > LOWER_LIMIT
         else:
             return False
 
