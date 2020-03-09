@@ -137,15 +137,15 @@ class ObjectTracker():
         else:
             pass
 
-    # Determine rotation angle from center of gravity position
-    def _rot_vel(self):
+    def _rotation_velocity(self):
+        VELOCITY = 0.25 * math.pi
         if not self._object_is_detected() or self._point_of_centroid is None:
             return 0.0
-        wid = self._captured_image.shape[1]/2
-        pos_x_rate = (self._point_of_centroid[0] - wid)*1.0/wid
-        rot = -0.25*pos_x_rate*math.pi
-        rospy.loginfo("detect %f", rot)
-        return rot
+
+        half_width = self._captured_image.shape[1] / 2.0
+        pos_x_rate = (half_width - self._point_of_centroid[0]) / half_width
+        rot_vel = pos_x_rate * VELOCITY
+        return rot_vel
 
     def image_processing(self):
         object_image = copy.deepcopy(self._captured_image)
@@ -181,7 +181,7 @@ class ObjectTracker():
             else:
                 cmd_vel.linear.x = 0
                 print("stay")
-            cmd_vel.angular.z = self._rot_vel()
+            cmd_vel.angular.z = self._rotation_velocity()
         self._pub_cmdvel.publish(cmd_vel)
 
 
