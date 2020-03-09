@@ -129,6 +129,11 @@ button_motor_on         : 9
 
 button_cmd_enable       : 4
 ```
+
+#### Videos
+
+[![joystick_control](http://img.youtube.com/vi/GswxdB8Ia0Y/sddefault.jpg)](https://youtu.be/GswxdB8Ia0Y)
+
 [back to example list](#how-to-use-examples)
 
 --- 
@@ -204,6 +209,11 @@ roslaunch raspimouse_ros_examples object_tracking.launch
         max_hsv_orange = np.array([20, 255, 255])
         return min_hsv_orange, max_hsv_orange
 ```
+
+#### Videos
+
+[![object_tracking](http://img.youtube.com/vi/U6_BuvrjyFc/sddefault.jpg)](https://youtu.be/U6_BuvrjyFc)
+
 [back to example list](#how-to-use-examples)
 
 --- 
@@ -262,6 +272,10 @@ Raspberry Pi Mouseをフィールドに置き、SW2を押してフィールド�
 
         cmd_vel = Twist()
 ```
+
+#### Videos
+
+[![line_tracing](http://img.youtube.com/vi/YGgbttREc6A/sddefault.jpg)](https://youtu.be/YGgbttREc6A)
 
 [back to example list](#how-to-use-examples)
 
@@ -347,4 +361,11 @@ rosrun map_server map_saver -f ~/maps/mymap
     <!-- <param name="kernelSize" value="1"/> -->
     <!-- <param name="lstep" value="0.05"/> -->
 ```
+
+#### Videos
+
+[![slam_urg](http://img.youtube.com/vi/gWozU47UqVE/sddefault.jpg)](https://youtu.be/gWozU47UqVE)
+
+[![slam_urg](http://img.youtube.com/vi/hV68UqAntfo/sddefault.jpg)](https://youtu.be/hV68UqAntfo)
+
 [back to example list](#how-to-use-examples)
