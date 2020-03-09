@@ -77,17 +77,15 @@ class ObjectTracker():
         max_hsv_blue= np.array([120, 255, 255])
         return min_hsv_blue, max_hsv_blue
 
-    # Extract object(use HSV color model)
-    def _detect_ball(self):
-        if self._captured_image is None:
+    def _extract_object_in_binary(self, cv_image):
+        if cv_image is None:
             return None
-        org = self._captured_image
-        hsv = cv2.cvtColor(org, cv2.COLOR_BGR2HSV)
 
         min_hsv, max_hsv = self._set_color_orange()
         # min_hsv, max_hsv = self._set_color_green()
         # min_hsv, max_hsv = self._set_color_blue()
 
+        hsv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
         binary = cv2.inRange(hsv, min_hsv, max_hsv)
         # Morphology
         kernel = np.ones((5, 5), np.uint8)
@@ -140,10 +138,11 @@ class ObjectTracker():
         return rot
 
     def image_processing(self):
-        object_binary_img = self._detect_ball()
-        self._monitor(object_binary_img, self._pub_binary_image)
-        centroid_img, self._point_of_centroid = self._detect_centroid(object_binary_img)
-        self._monitor(centroid_img, self._pub_pbject_image)
+        object_binary_img = self._extract_object_in_binary(self._captured_image)
+        if not object_binary_img is None:
+            self._monitor(object_binary_img, self._pub_binary_image)
+            centroid_img, self._point_of_centroid = self._detect_centroid(object_binary_img)
+            self._monitor(centroid_img, self._pub_pbject_image)
 
     def control(self):
         cmd_vel = Twist()
