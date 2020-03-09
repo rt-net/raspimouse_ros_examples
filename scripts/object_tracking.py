@@ -40,7 +40,7 @@ class ObjectTracker():
     def _pixels(self, cv_image):
         return cv_image.shape[0] * cv_image.shape[1]
 
-    def _detected_target(self):
+    def _object_is_detected(self):
         if not self._captured_image is None:
             object_per_image = self._object_pixels / self._pixels(self._captured_image)
             return object_per_image > ObjectTracker.LOWER_LIMIT
@@ -112,7 +112,7 @@ class ObjectTracker():
         self._calibrate_object_pixels_default()
         # Draw countours
         centroid_img = cv2.drawContours(self._captured_image, contours, area_max_num, (0, 255, 0), 5)
-        if self._detected_target():
+        if self._object_is_detected():
             M = cv2.moments(contours[area_max_num])
             centroid_x = int(M['m10'] / M['m00'])
             centroid_y = int(M['m01'] / M['m00'])
@@ -130,7 +130,7 @@ class ObjectTracker():
 
     # Determine rotation angle from center of gravity position
     def _rot_vel(self):
-        if not self._detected_target():
+        if not self._object_is_detected():
             return 0.0
         wid = self._captured_image.shape[1]/2
         pos_x_rate = (self.point_centroid[0] - wid)*1.0/wid
@@ -146,7 +146,7 @@ class ObjectTracker():
 
     def control(self):
         cmd_vel = Twist()
-        if self._detected_target():
+        if self._object_is_detected():
             # Move backward and forward by difference from default area
             if self._object_is_smaller_than_default():
                 cmd_vel.linear.x = 0.1
