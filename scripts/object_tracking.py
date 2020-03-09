@@ -19,6 +19,7 @@ class ObjectTracker():
         self._captured_image = None
         self._object_pixels = 0 # Maximum area detected in the current image[pixel]
         self._object_pixels_default = 0 # Maximum area detected from the first image[pixel]
+        self._point_of_centroid = None
 
         self._pub_binary_image = rospy.Publisher("binary", Image, queue_size=1)
         self._pub_pbject_image = rospy.Publisher("object", Image, queue_size=1)
@@ -133,7 +134,7 @@ class ObjectTracker():
         if not self._object_is_detected():
             return 0.0
         wid = self._captured_image.shape[1]/2
-        pos_x_rate = (self.point_centroid[0] - wid)*1.0/wid
+        pos_x_rate = (self._point_of_centroid[0] - wid)*1.0/wid
         rot = -0.25*pos_x_rate*math.pi
         rospy.loginfo("detect %f", rot)
         return rot
@@ -141,7 +142,7 @@ class ObjectTracker():
     def image_processing(self):
         object_binary_img = self._detect_ball()
         self._monitor(object_binary_img, self._pub_binary_image)
-        centroid_img, self.point_centroid = self._detect_centroid(object_binary_img)
+        centroid_img, self._point_of_centroid = self._detect_centroid(object_binary_img)
         self._monitor(centroid_img, self._pub_pbject_image)
 
     def control(self):
