@@ -54,7 +54,7 @@ source devel.setup.bash
 - [keyboard_control](#keyboard_control)
 - [joystick_control](#joystick_control)
 - [object_tracking](#object_tracking)
-- [line_tracing](#line_tracing)
+- [line_follower](#line_follower)
 - [SLAM](#SLAM)
 
 ---
@@ -218,7 +218,7 @@ roslaunch raspimouse_ros_examples object_tracking.launch
 
 --- 
 
-### line_tracing
+### line_follower
 
 ![mouse_with_line_trace_sensor](https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_line_trace_sensor.JPG)
 
@@ -240,10 +240,10 @@ Raspberry Pi Mouseにライントレースセンサを取り付けます。
 次のコマンドでノードを起動します。
 
 ```sh
-roslaunch raspimouse_ros_examples line_tracing.launch
+roslaunch raspimouse_ros_examples line_follower.launch
 
 # Control from remote computer
-roslaunch raspimouse_ros_examples line_tracing.launch mouse:=false
+roslaunch raspimouse_ros_examples line_follower.launch mouse:=false
 ```
 
 Raspberry Pi Mouseをフィールドに置き、SW2を押してフィールド上のセンサ値をサンプリングします。
@@ -262,10 +262,10 @@ Raspberry Pi Mouseをフィールドに置き、SW2を押してフィールド�
 
 #### Configure
 
-走行速度を変更するには[`./scripts/line_tracing.py`](./scripts/line_tracing.py)を編集します。
+走行速度を変更するには[`./scripts/line_follower.py`](./scripts/line_follower.py)を編集します。
 
 ```python
-    def _publish_cmdvel_for_line_trace(self):
+    def _publish_cmdvel_for_line_following(self):
         VEL_LINER_X = 0.08 # m/s
         VEL_ANGULAR_Z = 0.8 # rad/s
         LOW_VEL_ANGULAR_Z = 0.5 # rad/s
@@ -275,7 +275,7 @@ Raspberry Pi Mouseをフィールドに置き、SW2を押してフィールド�
 
 #### Videos
 
-[![line_tracing](http://img.youtube.com/vi/YGgbttREc6A/sddefault.jpg)](https://youtu.be/YGgbttREc6A)
+[![line_follower](http://img.youtube.com/vi/oPm0sW2V_tY/sddefault.jpg)](https://youtu.be/oPm0sW2V_tY)
 
 [back to example list](#how-to-use-examples)
 
