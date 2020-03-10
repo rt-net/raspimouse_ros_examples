@@ -275,7 +275,7 @@ Raspberry Pi Mouseをフィールドに置き、SW2を押してフィールド�
 
 #### Videos
 
-[![line_tracing](http://img.youtube.com/vi/YGgbttREc6A/sddefault.jpg)](https://youtu.be/YGgbttREc6A)
+[![line_tracing](http://img.youtube.com/vi/oPm0sW2V_tY/sddefault.jpg)](https://youtu.be/oPm0sW2V_tY)
 
 [back to example list](#how-to-use-examples)
 
