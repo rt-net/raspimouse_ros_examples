@@ -11,7 +11,7 @@ from raspimouse_ros_2.msg import ButtonValues
 from raspimouse_ros_2.msg import LedValues
 
 
-class LineTracer(object):
+class LineFollower(object):
     def __init__(self):
         self._SENSORS = {"left":0, "mid_left":0, "mid_right":0, "right":0}
         self._sensor_line_values = dict(self._SENSORS)
@@ -64,7 +64,7 @@ class LineTracer(object):
 
 
     def _callback_lightsensor(self, msg):
-        # The order of front distance sensors and line trace sensors is not same
+        # The order of the front distance sensors and the line following sensors are not same
         self._present_sensor_values["left"] = msg.right_forward
         self._present_sensor_values["mid_left"] = msg.right_side
         self._present_sensor_values["mid_right"] = msg.left_side
@@ -188,7 +188,7 @@ class LineTracer(object):
         self._pub_leds.publish(led_values)
 
 
-    def _publish_cmdvel_for_line_trace(self):
+    def _publish_cmdvel_for_line_following(self):
         VEL_LINER_X = 0.08 # m/s
         VEL_ANGULAR_Z = 0.8 # rad/s
         LOW_VEL_ANGULAR_Z = 0.5 # rad/s
@@ -216,12 +216,12 @@ class LineTracer(object):
     def update(self):
         if self._mouse_buttons.front: # SW0 of Raspberry Pi Mouse
             if self._sampling_is_done() and self._can_publish_cmdvel is False:
-                rospy.loginfo("start trace")
+                rospy.loginfo("start following")
                 self._motor_on()
                 self._beep_success()
                 self._can_publish_cmdvel = True
             else:
-                rospy.loginfo("stop trace")
+                rospy.loginfo("stop following")
                 self._motor_off()
                 self._beep_failure()
                 self._can_publish_cmdvel = False
@@ -235,19 +235,19 @@ class LineTracer(object):
             self._filed_sampling()
 
         if self._can_publish_cmdvel:
-            self._publish_cmdvel_for_line_trace()
+            self._publish_cmdvel_for_line_following()
 
         self._indicate_line_detections()
 
 
 def main():
-    rospy.init_node('line_tracing')
+    rospy.init_node('line_follower')
 
-    line_tracer = LineTracer()
+    line_follower = LineFollower()
 
     r = rospy.Rate(60)
     while not rospy.is_shutdown():
-        line_tracer.update()
+        line_follower.update()
 
         r.sleep()
 
