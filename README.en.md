@@ -16,6 +16,8 @@ Sample applications for Raspberry Pi Mouse with ROS.
     - Ubuntu server 16.04
     - Ubuntu server 18.04
     - https://wiki.ubuntu.com/ARM/RaspberryPi
+  - Device Driver
+    - [rt-net/RaspberryPiMouse](https://github.com/rt-net/RaspberryPiMouse)
   - ROS
     - [Kinetic Kame](http://wiki.ros.org/kinetic/Installation/Ubuntu)
     - [Melodic Morenia](http://wiki.ros.org/melodic/Installation/Ubuntu)
