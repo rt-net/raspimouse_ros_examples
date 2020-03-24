@@ -9,6 +9,7 @@ from geometry_msgs.msg import Twist
 from std_srvs.srv import Trigger
 from raspimouse_ros_2.msg import LightSensorValues
 from raspimouse_ros_2.msg import ButtonValues
+from raspimouse_ros_2.msg import LedValues
 
 class JoyWrapper(object):
     def __init__(self):
@@ -61,6 +62,7 @@ class JoyWrapper(object):
 
         self._pub_cmdvel = rospy.Publisher('cmd_vel', Twist, queue_size=1)
         self._pub_buzzer = rospy.Publisher('buzzer', UInt16, queue_size=1)
+        self._pub_leds = rospy.Publisher('leds', LedValues, queue_size=1)
         self._sub_joy = rospy.Subscriber('joy', Joy, self._callback_joy, queue_size=1)
         self._sub_lightsensor = rospy.Subscriber('lightsensors', LightSensorValues,
                 self._callback_lightsensor, queue_size=1)
@@ -142,6 +144,11 @@ class JoyWrapper(object):
     def _joy_shutdown(self, joy_msg):
         if joy_msg.buttons[self._BUTTON_SHUTDOWN_1] and\
                 joy_msg.buttons[self._BUTTON_SHUTDOWN_2]:
+
+            self._pub_cmdvel.publish(Twist())
+            self._pub_buzzer.publish(UInt16())
+            self._pub_leds.publish(LedValues())
+            self._motor_off()
             rospy.signal_shutdown('finish')
 
 
@@ -286,6 +293,22 @@ class JoyWrapper(object):
         rospy.sleep(beep_time)
         self._pub_buzzer.publish(0)
 
+    def _joy_leds(self, joy_msg):
+        led_values = LedValues()
+
+        if joy_msg.buttons[self._BUTTON_CMD_ENABLE]:
+            led_values.right_side = True
+
+        if joy_msg.buttons[self._BUTTON_BUZZER_ENABLE]:
+            led_values.right_forward = True
+
+        if joy_msg.buttons[self._BUTTON_SENSOR_SOUND_EN]:
+            led_values.left_forward = True
+
+        if joy_msg.buttons[self._BUTTON_CONFIG_ENABLE]:
+            led_values.left_side = True
+
+        self._pub_leds.publish(led_values)
 
     def update(self):
         if self._joy_msg is None:
@@ -296,6 +319,7 @@ class JoyWrapper(object):
         self._joy_buzzer_freq(self._joy_msg)
         self._joy_lightsensor_sound(self._joy_msg)
         self._joy_velocity_config(self._joy_msg)
+        self._joy_leds(self._joy_msg)
 
         self._joy_shutdown(self._joy_msg)
 
