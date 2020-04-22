@@ -1,0 +1,4 @@
+- git:
+    local-name: raspimouse_ros_2
+    uri: https://github.com/ryuichiueda/raspimouse_ros_2
+    version: master
