@@ -2,7 +2,7 @@
 
 # raspimouse_ros_examples
 
-[![Build Status](https://travis-ci.com/rt-net/raspimouse_ros_examples.svg?token=44UfTwwGaAupMGxC2ZWA&branch=master)](https://travis-ci.com/rt-net/raspimouse_ros_examples)
+[![industrial_ci](https://github.com/rt-net/raspimouse_ros_examples/workflows/industrial_ci/badge.svg?branch=master)](https://github.com/rt-net/raspimouse_ros_examples/actions?query=workflow%3Aindustrial_ci+branch%3Amaster)
 
 Sample applications for Raspberry Pi Mouse with ROS.
 
