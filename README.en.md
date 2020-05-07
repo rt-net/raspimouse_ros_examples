@@ -11,7 +11,7 @@ Sample applications for Raspberry Pi Mouse with ROS.
 ## Requirements
 
 - Raspberry Pi Mouse
-  - https://www.rt-net.jp/products/raspimouse2
+  - https://rt-net.jp/products/raspberrypimousev3/
   - Linux OS
     - Ubuntu server 16.04
     - Ubuntu server 18.04
@@ -43,7 +43,7 @@ rosdep install -r -y --from-paths . --ignore-src
 
 # make & install
 cd ~/catkin_ws && catkin_make
-source devel.setup.bash
+source devel/setup.bash
 ```
 
 ## License
