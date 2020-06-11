@@ -15,7 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import rospy, cv2, math
+import rospy
+import cv2
+import math
 import numpy as np
 import copy
 from sensor_msgs.msg import Image
@@ -29,8 +31,8 @@ class ObjectTracker():
     def __init__(self):
         self._cv_bridge = CvBridge()
         self._captured_image = None
-        self._object_pixels = 0 # Maximum area detected in the current image[pixel]
-        self._object_pixels_default = 0 # Maximum area detected from the first image[pixel]
+        self._object_pixels = 0  # Maximum area detected in the current image[pixel]
+        self._object_pixels_default = 0  # Maximum area detected from the first image[pixel]
         self._point_of_centroid = None
 
         self._pub_binary_image = rospy.Publisher("binary", Image, queue_size=1)
@@ -58,14 +60,14 @@ class ObjectTracker():
         # Object tracking is not performed below this ratio.
         LOWER_LIMIT = 0.01
 
-        if not self._captured_image is None:
+        if self._captured_image is not None:
             object_per_image = self._object_pixels / self._pixels(self._captured_image)
             return object_per_image > LOWER_LIMIT
         else:
             return False
 
     def _object_pixels_ratio(self):
-        if not self._captured_image is None:
+        if self._captured_image is not None:
             diff_pixels = self._object_pixels - self._object_pixels_default
             return diff_pixels / self._pixels(self._captured_image)
         else:
@@ -82,15 +84,15 @@ class ObjectTracker():
         min_hsv_orange = np.array([15, 200, 80])
         max_hsv_orange = np.array([20, 255, 255])
         return min_hsv_orange, max_hsv_orange
-    
+
     def _set_color_green(self):
         min_hsv_green = np.array([60, 60, 40])
         max_hsv_green = np.array([70, 255, 255])
         return min_hsv_green, max_hsv_green
 
     def _set_color_blue(self):
-        min_hsv_blue= np.array([105, 90, 40])
-        max_hsv_blue= np.array([120, 255, 255])
+        min_hsv_blue = np.array([105, 90, 40])
+        max_hsv_blue = np.array([120, 255, 255])
         return min_hsv_blue, max_hsv_blue
 
     def _extract_object_in_binary(self, cv_image):
@@ -105,7 +107,7 @@ class ObjectTracker():
         binary = cv2.inRange(hsv, min_hsv, max_hsv)
         # Morphology
         kernel = np.ones((5, 5), np.uint8)
-        binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel, iterations = 2)
+        binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel, iterations=2)
         return binary
 
     def _calibrate_object_pixels_default(self):
@@ -115,12 +117,12 @@ class ObjectTracker():
     def _extract_biggest_contour(self, binary_img):
         biggest_contour_index = False
         biggest_contour_area = 0
-        _, contours, hierarchy = cv2.findContours(binary_img, 
-                cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        _, contours, hierarchy = cv2.findContours(
+            binary_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         for i, cnt in enumerate(contours):
             area = cv2.contourArea(cnt)
             if biggest_contour_area < area:
-                biggest_contour_area  = area
+                biggest_contour_area = area
                 biggest_contour_index = i
 
         if biggest_contour_index is False:
@@ -142,7 +144,7 @@ class ObjectTracker():
         return cv2.drawContours(input_image, [contour], 0, (0, 255, 0), 5)
 
     def _draw_centroid(self, input_image, point_centroid):
-        return cv2.circle(input_image, point_centroid, 15, (255, 0, 0), thickness=-1) 
+        return cv2.circle(input_image, point_centroid, 15, (255, 0, 0), thickness=-1)
 
     def _monitor(self, img, pub):
         if img.ndim == 2:
@@ -166,17 +168,17 @@ class ObjectTracker():
         object_image = copy.deepcopy(self._captured_image)
         object_binary_img = self._extract_object_in_binary(self._captured_image)
 
-        if not object_binary_img is None:
+        if object_binary_img is not None:
             biggest_contour = self._extract_biggest_contour(object_binary_img)
-            if not biggest_contour is False:
+            if biggest_contour is not False:
                 self._object_pixels = cv2.contourArea(biggest_contour)
                 self._calibrate_object_pixels_default()
 
-                object_image = self._draw_contour(object_image,
-                        biggest_contour)
+                object_image = self._draw_contour(
+                    object_image, biggest_contour)
 
                 point = self._calculate_centroid_point(biggest_contour)
-                if not point is False:
+                if point is not False:
                     self._point_of_centroid = point
                     object_image = self._draw_centroid(object_image, point)
 
@@ -211,4 +213,3 @@ if __name__ == '__main__':
         ot.image_processing()
         ot.control()
         rate.sleep()
-
