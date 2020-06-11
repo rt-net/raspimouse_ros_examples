@@ -25,6 +25,7 @@ from raspimouse_ros_2.msg import LightSensorValues
 from raspimouse_ros_2.msg import ButtonValues
 from raspimouse_ros_2.msg import LedValues
 
+
 class JoyWrapper(object):
     def __init__(self):
 
@@ -60,10 +61,10 @@ class JoyWrapper(object):
         self._BUTTON_CONFIG_ENABLE = rospy.get_param('~button_config_enable')
 
         # for _joy_velocity_config()
-        self._MAX_VEL_LINEAR_X = 2.0 # m/s
-        self._MAX_VEL_ANGULAR_Z = 2.0 * math.pi # rad/s
-        self._DEFAULT_VEL_LINEAR_X = 0.5 # m/s
-        self._DEFAULT_VEL_ANGULAR_Z = 1.0 * math.pi # rad/s
+        self._MAX_VEL_LINEAR_X = 2.0  # m/s
+        self._MAX_VEL_ANGULAR_Z = 2.0 * math.pi  # rad/s
+        self._DEFAULT_VEL_LINEAR_X = 0.5  # m/s
+        self._DEFAULT_VEL_ANGULAR_Z = 1.0 * math.pi  # rad/s
 
         self._joy_msg = None
         self._lightsensor = LightSensorValues()
@@ -78,10 +79,10 @@ class JoyWrapper(object):
         self._pub_buzzer = rospy.Publisher('buzzer', UInt16, queue_size=1)
         self._pub_leds = rospy.Publisher('leds', LedValues, queue_size=1)
         self._sub_joy = rospy.Subscriber('joy', Joy, self._callback_joy, queue_size=1)
-        self._sub_lightsensor = rospy.Subscriber('lightsensors', LightSensorValues,
-                self._callback_lightsensor, queue_size=1)
-        self._sub_buttons = rospy.Subscriber('buttons', ButtonValues,
-                self._callback_buttons, queue_size=1)
+        self._sub_lightsensor = rospy.Subscriber(
+            'lightsensors', LightSensorValues, self._callback_lightsensor, queue_size=1)
+        self._sub_buttons = rospy.Subscriber(
+            'buttons', ButtonValues, self._callback_buttons, queue_size=1)
 
         try:
             rospy.wait_for_service("motor_on", timeout=5)
@@ -93,18 +94,14 @@ class JoyWrapper(object):
             rospy.on_shutdown(self._motor_off)
             self._motor_on()
 
-
     def _callback_joy(self, msg):
         self._joy_msg = msg
-
 
     def _callback_lightsensor(self, msg):
         self._lightsensor = msg
 
-
     def _callback_buttons(self, msg):
         self._mouse_buttons = msg
-
 
     def _motor_on(self):
         rospy.ServiceProxy("motor_on", Trigger).call()
@@ -113,7 +110,6 @@ class JoyWrapper(object):
     def _motor_off(self):
         rospy.ServiceProxy("motor_off", Trigger).call()
         rospy.loginfo("motor_off")
-
 
     def _joy_dpad(self, joy_msg, target_pad, positive_on):
         # d pad inputs of f710 controller are analog
@@ -154,7 +150,6 @@ class JoyWrapper(object):
         else:
             return False
 
-
     def _joy_shutdown(self, joy_msg):
         if joy_msg.buttons[self._BUTTON_SHUTDOWN_1] and\
                 joy_msg.buttons[self._BUTTON_SHUTDOWN_2]:
@@ -165,14 +160,12 @@ class JoyWrapper(object):
             self._motor_off()
             rospy.signal_shutdown('finish')
 
-
     def _joy_motor_onoff(self, joy_msg):
         if joy_msg.buttons[self._BUTTON_MOTOR_ON]:
             self._motor_on()
 
         if joy_msg.buttons[self._BUTTON_MOTOR_OFF]:
             self._motor_off()
-
 
     def _joy_cmdvel(self, joy_msg):
         cmdvel = Twist()
@@ -188,14 +181,13 @@ class JoyWrapper(object):
                 self._pub_cmdvel.publish(cmdvel)
                 self._cmdvel_has_value = False
 
-
     def _joy_buzzer_freq(self, joy_msg):
         freq = UInt16()
         buttons = [
-                self._dpad(joy_msg,self._DPAD_BUZZER0),
-                self._dpad(joy_msg,self._DPAD_BUZZER1),
-                self._dpad(joy_msg,self._DPAD_BUZZER2),
-                self._dpad(joy_msg,self._DPAD_BUZZER3),
+                self._dpad(joy_msg, self._DPAD_BUZZER0),
+                self._dpad(joy_msg, self._DPAD_BUZZER1),
+                self._dpad(joy_msg, self._DPAD_BUZZER2),
+                self._dpad(joy_msg, self._DPAD_BUZZER3),
                 joy_msg.buttons[self._BUTTON_BUZZER4],
                 joy_msg.buttons[self._BUTTON_BUZZER5],
                 joy_msg.buttons[self._BUTTON_BUZZER6],
@@ -203,10 +195,10 @@ class JoyWrapper(object):
                 ]
         # buzzer frequency Hz
         SCALES = [
-                523, 587, 659, 699, 
+                523, 587, 659, 699,
                 784, 880, 987, 1046
                 ]
-        
+
         if joy_msg.buttons[self._BUTTON_BUZZER_ENABLE]:
             for i, button in enumerate(buttons):
                 if button:
@@ -220,7 +212,6 @@ class JoyWrapper(object):
             if self._buzzer_has_value:
                 self._pub_buzzer.publish(freq)
                 self._buzzer_has_value = False
-
 
     def _joy_lightsensor_sound(self, joy_msg):
         freq = UInt16()
@@ -244,19 +235,18 @@ class JoyWrapper(object):
         else:
             return value
 
-    
     def _joy_velocity_config(self, joy_msg):
-        ADD_VEL_LINEAR_X = 0.1 # m/s
-        ADD_VEL_ANGULAR_Z = 0.1 * math.pi # m/s
-        BUZZER_FREQ_ADD = 880 # Hz
-        BUZZER_FREQ_SUB = 440 # Hz
-        BUZZER_FREQ_RESET = 660 # Hz
-        BUZZER_BEEP_TIME = 0.2 # sec
+        ADD_VEL_LINEAR_X = 0.1  # m/s
+        ADD_VEL_ANGULAR_Z = 0.1 * math.pi  # m/s
+        BUZZER_FREQ_ADD = 880  # Hz
+        BUZZER_FREQ_SUB = 440  # Hz
+        BUZZER_FREQ_RESET = 660  # Hz
+        BUZZER_BEEP_TIME = 0.2  # sec
 
         if joy_msg.buttons[self._BUTTON_CONFIG_ENABLE]:
             if self._mouse_buttons.front:
                 self._vel_linear_x = self._config_velocity(
-                        self._vel_linear_x, ADD_VEL_LINEAR_X, 
+                        self._vel_linear_x, ADD_VEL_LINEAR_X,
                         0, self._MAX_VEL_LINEAR_X)
                 self._vel_angular_z = self._config_velocity(
                         self._vel_angular_z, ADD_VEL_ANGULAR_Z,
@@ -268,7 +258,7 @@ class JoyWrapper(object):
                     pass
             elif self._mouse_buttons.rear:
                 self._vel_linear_x = self._config_velocity(
-                        self._vel_linear_x, -ADD_VEL_LINEAR_X, 
+                        self._vel_linear_x, -ADD_VEL_LINEAR_X,
                         0, self._MAX_VEL_LINEAR_X)
                 self._vel_angular_z = self._config_velocity(
                         self._vel_angular_z, -ADD_VEL_ANGULAR_Z,
@@ -288,20 +278,20 @@ class JoyWrapper(object):
                     pass
 
             rospy.loginfo(
-                    "linear_x:" + str(self._vel_linear_x) +\
+                    "linear_x:" + str(self._vel_linear_x) +
                     ", angular_z:" + str(self._vel_angular_z)
                     )
 
     def _config_velocity(self, current, add, lowerlimit, upperlimit):
         output = current + add
-        
+
         if output < lowerlimit:
             output = lowerlimit
         if output > upperlimit:
             output = upperlimit
 
         return output
-    
+
     def _beep_buzzer(self, freq, beep_time=0):
         self._pub_buzzer.publish(freq)
         rospy.sleep(beep_time)
@@ -326,7 +316,7 @@ class JoyWrapper(object):
 
     def update(self):
         if self._joy_msg is None:
-            return 
+            return
 
         self._joy_motor_onoff(self._joy_msg)
         self._joy_cmdvel(self._joy_msg)
