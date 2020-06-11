@@ -1,6 +1,7 @@
 <launch>
   <arg name="urg" default="false" />
   <arg name="rplidar" default="false" />
+  <arg name="lds" default="false" />
 
   <arg name="port" default="/dev/ttyACM0" />
   <arg name="frame_id" default="laser" />
@@ -18,5 +19,12 @@
       <param name="serial_port" value="$(arg port)"/>
       <param name="frame_id" value="$(arg frame_id)"/>
     </node>
+  </group>
+
+  <group if="$(arg lds)">
+    <include file="$(find hls_lfcd_lds_driver)/launch/hlds_laser.launch" >
+      <param name="port" value="$(arg port)"/>
+      <param name="frame_id" value="$(arg frame_id)"/>
+    </include>
   </group>
 </launch>
