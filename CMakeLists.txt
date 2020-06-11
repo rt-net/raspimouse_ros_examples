@@ -10,3 +10,4 @@ include_directories(
 )
 
 roslint_python()
+roslint_add_test()
