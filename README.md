@@ -292,21 +292,22 @@ LiDARを使ってSLAM（自己位置推定と地図作成）を行うサンプ�
 #### Requirements 
 
 - LiDAR
-  - URG
-    - [URG-04LX-UG01](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_1296&products_id=2816)
-    - [Raspberry Pi Mouse オプションキット No.2 \[URGマウント\]](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3517)
-  - RPLIDAR
-    - [Raspberry Pi Mouse オプションキット No.6 \[LiDAR\]](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3770)
+  - [URG-04LX-UG01](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_1296&products_id=2816)
+  - [RPLIDAR A1](https://www.slamtec.com/en/Lidar/A1)
+  - [LDS-01](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_5&products_id=3676)
+- [LiDAR Mount](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3867)
 - Joystick Controller (Optional)
   
 #### Installation
 
 Raspberry Pi MouseにLiDARを取り付けます。
 
-- URG
+- URG-04LX-UG01
   - <img src="https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_urg.JPG" width=500 />
-- RPLIDAR
-  - <img src="https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_rpilidar.JPG" width=500 />
+- RPLIDAR A1
+  - <img src="https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_rpilidar.png" width=500 />
+- LDS-01
+  - <img src="https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_lds01.JPG" width=500 />
   
 #### How to use
 
@@ -318,6 +319,10 @@ roslaunch raspimouse_ros_examples mouse_with_lidar.launch urg:=true port:=/dev/t
 
 # RPLIDAR
 roslaunch raspimouse_ros_examples mouse_with_lidar.launch rplidar:=true port:=/dev/ttyUSB0
+
+# LDS
+roslaunch raspimouse_ros_examples mouse_with_lidar.launch lds:=true port:=/dev/ttyUSB0
+
 ```
 
 Raspberry Pi Mouseを動かすため`teleop.launch`を起動します
@@ -335,6 +340,9 @@ roslaunch raspimouse_ros_examples slam_gmapping.launch urg:=true
 
 # RPLIDAR
 roslaunch raspimouse_ros_examples slam_gmapping.launch rplidar:=true
+
+# LDS
+roslaunch raspimouse_ros_examples slam_gmapping.launch lds:=true
 ```
 
 Raspberry Pi Mouseを動かして地図を作成します。
@@ -359,6 +367,7 @@ rosrun map_server map_saver -f ~/maps/mymap
     <param name="map_update_interval" value="1.0"/>
     <param name="maxUrange" value="5.6" if="$(arg urg)"/>
     <param name="maxUrange" value="12" if="$(arg rplidar)"/>
+    <param name="maxUrange" value="3.5" if="$(arg lds)"/>
     <!-- <param name="sigma" value="0.05"/> -->
     <!-- <param name="kernelSize" value="1"/> -->
     <!-- <param name="lstep" value="0.05"/> -->

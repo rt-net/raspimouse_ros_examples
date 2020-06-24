@@ -287,21 +287,22 @@ This is an example to use LiDAR for SLAM (Simultaneous Localization And Mapping)
 #### Requirements 
 
 - LiDAR
-  - URG
-    - [URG-04LX-UG01](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_1296&products_id=2816&language=en)
-    - [Raspberry Pi Mouse Option kit No.2 \[URG mount\]](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3517&language=en)
-  - RPLIDAR
-    - [Raspberry Pi Mouse Option kit No.6 \[LiDAR\]](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3770&language=en)
+  - [URG-04LX-UG01](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_1296&products_id=2816&language=en)
+  - [RPLIDAR A1](https://www.slamtec.com/en/Lidar/A1)
+  - [LDS-01](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_5&products_id=3676&language=en)
+- [LiDAR Mount](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3867&language=en)
 - Joystick Controller (Optional)
   
 #### Installation
 
 Install a LiDAR to the Raspberry Pi Mouse.
 
-- URG
-  - ![mouse_with_urg](https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_urg.JPG)
-- RPLIDAR
-  - ![mouse_with_rplidar](https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_rpilidar.JPG)
+- URG-04LX-UG01
+  - <img src="https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_urg.JPG" width=500 />
+- RPLIDAR A1
+  - <img src="https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_rpilidar.png" width=500 />
+- LDS-01
+  - <img src="https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_lds01.JPG" width=500 />
   
 #### How to use
 
@@ -313,6 +314,9 @@ roslaunch raspimouse_ros_examples mouse_with_lidar.launch urg:=true port:=/dev/t
 
 # RPLIDAR
 roslaunch raspimouse_ros_examples mouse_with_lidar.launch rplidar:=true port:=/dev/ttyUSB0
+
+# LDS
+roslaunch raspimouse_ros_examples mouse_with_lidar.launch lds:=true port:=/dev/ttyUSB0
 ```
 
 Next, launch `teleop.launch` to control Raspberry Pi Mouse with the following command:
@@ -330,6 +334,9 @@ roslaunch raspimouse_ros_examples slam_gmapping.launch urg:=true
 
 # RPLIDAR
 roslaunch raspimouse_ros_examples slam_gmapping.launch rplidar:=true
+
+# LDS
+roslaunch raspimouse_ros_examples slam_gmapping.launch lds:=true
 ```
 
 After moving Raspberry Pi Mouse and makeing a map, run a node to save the map with the following command:
@@ -352,6 +359,7 @@ Edit [./launch/slam_gmapping.launch](./launch/slam_gmapping.launch) to configure
     <param name="map_update_interval" value="1.0"/>
     <param name="maxUrange" value="5.6" if="$(arg urg)"/>
     <param name="maxUrange" value="12" if="$(arg rplidar)"/>
+    <param name="maxUrange" value="3.5" if="$(arg lds)"/>
     <!-- <param name="sigma" value="0.05"/> -->
     <!-- <param name="kernelSize" value="1"/> -->
     <!-- <param name="lstep" value="0.05"/> -->
