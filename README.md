@@ -6,6 +6,8 @@
 
 Raspberry Pi MouseのROSサンプルコード集です。
 
+ROS 2のサンプルコード集は[こちら](https://github.com/rt-net/raspimouse_ros2_examples)。
+
 <img src="https://github.com/rt-net/raspimouse_ros_examples/blob/images/raspberry_pi_mouse.JPG" width="500" />
 
 ## Requirements
