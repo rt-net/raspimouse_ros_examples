@@ -305,7 +305,7 @@ Raspberry Pi MouseにLiDARを取り付けます。
 - URG-04LX-UG01
   - <img src="https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_urg.JPG" width=500 />
 - RPLIDAR A1
-  - <img src="https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_rpilidar.png" width=500 />
+  - <img src="https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_rplidar.png" width=500 />
 - LDS-01
   - <img src="https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_lds01.JPG" width=500 />
   
