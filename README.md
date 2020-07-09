@@ -390,7 +390,7 @@ rosrun map_server map_saver -f ~/maps/mymap
 
 <img src=https://www.rt-net.jp/wp-content/uploads/2018/02/img-usb9s_01.png width=500 />
 
-IMUセンサを使用した姿勢制御のコード例です。
+IMUセンサを使用した角度制御のコード例です。
 
 #### Requirements
 
@@ -417,17 +417,17 @@ roslaunch raspimouse_ros_examples direction_control.launch
 
 SW0 ~ SW2を押して動作モードを切り替えます。
 
-- SW0: ジャイロセンサのバイアスをキャリブレーションし、ラズパイマウスの方位角を0 radにリセットします
-- SW1: 方位角を0 radに維持する姿勢制御を開始します
+- SW0: ジャイロセンサのバイアスをキャリブレーションし、ラズパイマウスの方位角を`0 rad`にリセットします
+- SW1: 方位角を`0 rad`に維持する角度制御を開始します
   - SW0 ~ SW2を押して終了します
   - ラズパイマウス本体を横に傾けると終了します
-- SW2: 方位角を-π ~ π radに変化させる姿勢制御を開始します
+- SW2: 方位角を`-π ~ π rad`に変化させる角度制御を開始します
   - SW0 ~ SW2を押して終了します
   - ラズパイマウス本体を横に傾けると終了します
 
 #### Configure
 
-姿勢制御に使うPID制御器のゲインを変更するには[`./scripts/direction_control.py`](./scripts/direction_control.py)を編集します。
+角度制御に使うPID制御器のゲインを変更するには[`./scripts/direction_control.py`](./scripts/direction_control.py)を編集します。
 
 ```python
 class DirectionController(object):
