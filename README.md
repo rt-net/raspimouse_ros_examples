@@ -60,7 +60,7 @@ source devel/setup.bash
 - [object_tracking](#object_tracking)
 - [line_follower](#line_follower)
 - [SLAM](#SLAM)
-- [attitude_control](#attitude_control)
+- [direction_control](#direction_control)
 
 ---
 
@@ -386,7 +386,7 @@ rosrun map_server map_saver -f ~/maps/mymap
 
 ---
 
-### attitude_control
+### direction_control
 
 <img src=https://www.rt-net.jp/wp-content/uploads/2018/02/img-usb9s_01.png width=500 />
 
@@ -412,7 +412,7 @@ Raspberry Pi Mouse にLiDAR Mountを取り付けます。
 次のコマンドでノードを起動します。
 
 ```sh
-roslaunch raspimouse_ros_examples attitude_control.launch
+roslaunch raspimouse_ros_examples direction_control.launch
 ```
 
 SW0 ~ SW2を押して動作モードを切り替えます。
@@ -427,7 +427,7 @@ SW0 ~ SW2を押して動作モードを切り替えます。
 
 #### Configure
 
-姿勢制御に使うPID制御器のゲインを変更するには[`./scripts/attitude_control.py`](./scripts/attitude_control.py)を編集します。
+姿勢制御に使うPID制御器のゲインを変更するには[`./scripts/direction_control.py`](./scripts/direction_control.py)を編集します。
 
 ```python
 class AttitudeController(object):
