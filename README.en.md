@@ -59,6 +59,7 @@ This repository is licensed under the Apache 2.0, see [LICENSE](./LICENSE) for d
 - [object_tracking](#object_tracking)
 - [line_follower](#line_follower)
 - [SLAM](#SLAM)
+- [direction_control](#direction_control)
 
 ---
 
@@ -372,5 +373,64 @@ Edit [./launch/slam_gmapping.launch](./launch/slam_gmapping.launch) to configure
 [![slam_urg](http://img.youtube.com/vi/gWozU47UqVE/sddefault.jpg)](https://youtu.be/gWozU47UqVE)
 
 [![slam_urg](http://img.youtube.com/vi/hV68UqAntfo/sddefault.jpg)](https://youtu.be/hV68UqAntfo)
+
+[back to example list](#how-to-use-examples)
+
+---
+
+### direction_control
+
+<img src=https://www.rt-net.jp/wp-content/uploads/2018/02/img-usb9s_01.png width=500 />
+
+This is an example to use an IMU sensor for direction control.
+
+#### Requirements
+
+- [USB output 9 degrees IMU sensor module](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_1&products_id=3416&language=en)
+- [LiDAR Mount](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3867)
+
+#### Installation
+
+Install the IMU sensor module to the LiDAR mount.
+
+<img src=https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_imu_2.JPG width=500 />
+
+Install the LiDAR mount to the Raspberry Pi Mouse.
+
+<img src=https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_imu_1.JPG width=500 />
+
+#### How to use
+
+Launch nodes on Raspberry Pi Mouse with the following command:
+
+```sh
+roslaunch raspimouse_ros_examples direction_control.launch
+```
+
+Then, press SW0 ~ SW2 to change the control mode as following,
+
+- SW0: Calibrate the gyroscope bias and reset a heading angle of Raspberry Pi Mouse to 0 rad.
+- SW1: Start a direction control to keep the heading angle to 0 rad.
+  - Press SW0 ~ SW2 or tilt the body to sideways to finish the control.
+- SW2: Start a direction control to change the heading angle to `-π ~ π rad`.
+  - Press SW0 ~ SW2 or tilt the body to sideways to finish the control.
+
+#### Configure
+
+Edit [`./scripts/direction_control.py`](./scripts/direction_control.py)
+to configure gains of a PID controller for the direction control.
+
+```python
+class DirectionController(object):
+    # ---
+    def __init__(self):
+        # ---
+        # for angle control
+        self._omega_pid_controller = PIDController(10, 0, 20)
+```
+
+#### Videos
+
+[![slam_urg](http://img.youtube.com/vi/LDpC2wqIoU4/hqdefault.jpg)](https://youtu.be/LDpC2wqIoU4)
 
 [back to example list](#how-to-use-examples)
