@@ -52,7 +52,7 @@ class PIDController(object):
         return self._output
 
 
-class AttitudeController(object):
+class DirectionController(object):
     _MODE_NONE = 0
     _MODE_CALIBRATION = 1
     _MODE_KEEP_ZERO_RADIAN = 2
@@ -291,9 +291,9 @@ class AttitudeController(object):
 
 
 def main():
-    rospy.init_node('attitude_control')
+    rospy.init_node('direction_control')
 
-    controller = AttitudeController()
+    controller = DirectionController()
 
     r = rospy.Rate(60)
     while not rospy.is_shutdown():

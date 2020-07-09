@@ -430,7 +430,7 @@ SW0 ~ SW2を押して動作モードを切り替えます。
 姿勢制御に使うPID制御器のゲインを変更するには[`./scripts/direction_control.py`](./scripts/direction_control.py)を編集します。
 
 ```python
-class AttitudeController(object):
+class DirectionController(object):
     # ---
     def __init__(self):
         # ---
