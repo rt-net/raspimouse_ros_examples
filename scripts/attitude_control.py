@@ -97,7 +97,6 @@ class AttitudeController(object):
         else:
             rospy.on_shutdown(self._motor_off)
 
-
     def _callback_buttons(self, msg):
         self._mouse_buttons = msg
 
@@ -105,7 +104,7 @@ class AttitudeController(object):
         self._imu_data_raw = msg
 
         self._calculate_heading_angle(
-            self._imu_data_raw.angular_velocity.z, 
+            self._imu_data_raw.angular_velocity.z,
             self._imu_data_raw.header.stamp
         )
 
@@ -127,7 +126,7 @@ class AttitudeController(object):
 
         omega = ALPHA * (omega_ref - self._omega_bias)
         diff_timestamp = timestamp - self._prev_imu_timestamp
-        
+
         self._heading_angle += omega * diff_timestamp.to_sec()
         self._prev_imu_timestamp = timestamp
 
@@ -170,7 +169,7 @@ class AttitudeController(object):
     def _keep_zero_radian(self):
         self._angle_control(0.0)
 
-    def _rotation(self, start_angle = -math.pi*0.5, end_angle = math.pi*0.5):
+    def _rotation(self, start_angle=-math.pi*0.5, end_angle=math.pi*0.5):
         ADD_ANGLE = math.radians(2)
 
         if start_angle > end_angle:
