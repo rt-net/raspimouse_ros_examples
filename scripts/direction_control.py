@@ -152,7 +152,11 @@ class DirectionController(object):
                 samples.append(self._imu_data_raw.angular_velocity.z)
                 prev_imu_seq = self._imu_data_raw.header.seq
             rospy.sleep(WAIT_TIME)
-        self._omega_bias = numpy.mean(samples)
+
+        if samples:
+            self._omega_bias = numpy.mean(samples)
+        else:
+            rospy.logwarn("No imu_data received.")
 
         # Reset variables for heading angle calculation
         self._heading_angle = 0.0
