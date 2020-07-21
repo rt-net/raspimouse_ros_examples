@@ -1,0 +1,7 @@
+<launch>
+  <include file="$(find raspimouse_ros_2)/launch/raspimouse.launch" />
+
+  <include file="$(find rt_usb_9axisimu_driver)/launch/rt_usb_9axisimu_driver.launch" />
+
+  <node pkg="raspimouse_ros_examples" name="direction_control" type="direction_control.py" required="true" output="screen"/>
+</launch>

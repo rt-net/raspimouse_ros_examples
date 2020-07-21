@@ -26,6 +26,7 @@
   <exec_depend>map_server</exec_depend>
   <exec_depend>rplidar_ros</exec_depend>
   <exec_depend>hls_lfcd_lds_driver</exec_depend>
+  <exec_depend>rt_usb_9axisimu_driver</exec_depend>
 
   <export>
   </export>

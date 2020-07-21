@@ -39,6 +39,8 @@ cd ~/catkin_ws/src
 # Clone ROS packages
 git clone https://github.com/ryuichiueda/raspimouse_ros_2
 git clone https://github.com/rt-net/raspimouse_ros_examples 
+# For direction control example
+git clone https://github.com/rt-net/rt_usb_9axisimu_driver
 
 # Install dependencies
 rosdep install -r -y --from-paths . --ignore-src      
@@ -60,6 +62,7 @@ source devel/setup.bash
 - [object_tracking](#object_tracking)
 - [line_follower](#line_follower)
 - [SLAM](#SLAM)
+- [direction_control](#direction_control)
 
 ---
 
@@ -380,5 +383,65 @@ rosrun map_server map_saver -f ~/maps/mymap
 [![slam_urg](http://img.youtube.com/vi/gWozU47UqVE/sddefault.jpg)](https://youtu.be/gWozU47UqVE)
 
 [![slam_urg](http://img.youtube.com/vi/hV68UqAntfo/sddefault.jpg)](https://youtu.be/hV68UqAntfo)
+
+[back to example list](#how-to-use-examples)
+
+---
+
+### direction_control
+
+<img src=https://www.rt-net.jp/wp-content/uploads/2018/02/img-usb9s_01.png width=500 />
+
+IMUセンサを使用した角度制御のコード例です。
+
+#### Requirements
+
+- [USB出力9軸IMUセンサモジュール](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_1&products_id=3416&language=ja)
+- [LiDAR Mount](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3867)
+- RT-USB-9axisIMU ROS Package.
+  - https://github.com/rt-net/rt_usb_9axisimu_driver
+
+#### Installation
+
+LiDAR MountにIMUセンサモジュールを取り付けます。
+
+<img src=https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_imu_2.JPG width=500 />
+
+Raspberry Pi Mouse にLiDAR Mountを取り付けます。
+
+<img src=https://github.com/rt-net/raspimouse_ros_examples/blob/images/mouse_with_imu_1.JPG width=500 />
+
+#### How to use
+
+次のコマンドでノードを起動します。
+
+```sh
+roslaunch raspimouse_ros_examples direction_control.launch
+```
+
+SW0 ~ SW2を押して動作モードを切り替えます。
+
+- SW0: ジャイロセンサのバイアスをキャリブレーションし、ラズパイマウスの方位角を`0 rad`にリセットします
+- SW1: 方位角を`0 rad`に維持する角度制御を開始します
+  - SW0 ~ SW2を押すか、ラズパイマウス本体を横に傾けると終了します
+- SW2: 方位角を`-π ~ π rad`に変化させる角度制御を開始します
+  - SW0 ~ SW2を押すか、ラズパイマウス本体を横に傾けると終了します
+
+#### Configure
+
+角度制御に使うPID制御器のゲインを変更するには[`./scripts/direction_control.py`](./scripts/direction_control.py)を編集します。
+
+```python
+class DirectionController(object):
+    # ---
+    def __init__(self):
+        # ---
+        # for angle control
+        self._omega_pid_controller = PIDController(10, 0, 20)
+```
+
+#### Videos
+
+[![slam_urg](http://img.youtube.com/vi/LDpC2wqIoU4/hqdefault.jpg)](https://youtu.be/LDpC2wqIoU4)
 
 [back to example list](#how-to-use-examples)
