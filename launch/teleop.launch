@@ -4,6 +4,7 @@
   <arg name="joydev" default="/dev/input/js0" />
   <arg name="joyconfig" default="f710" />
   <arg name="key" default="false" />
+  <arg name="speed" default="0.1" />
 
   <group if="$(arg mouse)">
     <include file="$(find raspimouse_ros_2)/launch/raspimouse.launch" />
@@ -20,6 +21,6 @@
   </group>
 
   <group if="$(arg key)">
-    <node name="teleop_twist_keyboard" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen" />
+    <node name="teleop_twist_keyboard" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" args="_speed:=$(arg speed)" output="screen" />
   </group>
 </launch>
