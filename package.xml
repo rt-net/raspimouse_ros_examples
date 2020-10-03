@@ -3,7 +3,6 @@
   <name>raspimouse_ros_examples</name>
   <version>0.0.1</version>
   <description>The raspimouse_ros_examples package</description>
-  <maintainer email="s.aoki@rt-net.jp">ShotaAk</maintainer>
   <maintainer email="takuminpc@gmail.com">tentenNT</maintainer>
   <license>Apache License 2.0</license>
 
@@ -16,17 +15,13 @@
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>raspimouse_ros_2</exec_depend>
   <exec_depend>cv_bridge</exec_depend>
-  <exec_depend>cv_camera</exec_depend>
   <exec_depend>web_video_server</exec_depend>
-  <exec_depend>joy</exec_depend>
-  <exec_depend>teleop_twist_keyboard</exec_depend>
   <exec_depend>gmapping</exec_depend>
   <exec_depend>urg_node</exec_depend>
   <exec_depend>tf</exec_depend>
   <exec_depend>map_server</exec_depend>
   <exec_depend>rplidar_ros</exec_depend>
   <exec_depend>hls_lfcd_lds_driver</exec_depend>
-  <exec_depend>rt_usb_9axisimu_driver</exec_depend>
 
   <export>
   </export>
