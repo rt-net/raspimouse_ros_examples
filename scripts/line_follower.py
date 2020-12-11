@@ -166,7 +166,7 @@ class LineFollower(object):
         self._line_values_are_sampled = True
         self._set_line_thresholds()
 
-    def _filed_sampling(self):
+    def _field_sampling(self):
         self._beep_start()
         self._sensor_field_values = self._get_multisampled_sensor_values()
         self._beep_success()
@@ -227,7 +227,7 @@ class LineFollower(object):
 
         elif self._mouse_buttons.rear:  # SW2
             rospy.loginfo("field sampling:")
-            self._filed_sampling()
+            self._field_sampling()
 
         if self._can_publish_cmdvel:
             self._publish_cmdvel_for_line_following()
