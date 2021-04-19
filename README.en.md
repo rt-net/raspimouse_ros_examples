@@ -185,10 +185,11 @@ Then, launch nodes with the following command:
 ```sh
 roslaunch raspimouse_ros_examples object_tracking.launch
 ```
+This sample publishes `binary` and `object` topics for the object detection image.
+These images can be viewed with [RViz](http://wiki.ros.org/ja/rviz)
+or [rqt_image_view](http://wiki.ros.org/rqt_image_view).
 
-Browse \[IP address of Raspbery Pi Mouse\]:8080 to show a camera image and a tracking result.
-
-<img src=https://rt-net.github.io/images/raspberry-pi-mouse/web_video_server.png width=500 />
+<img src=https://rt-net.github.io/images/raspberry-pi-mouse/object_tracking_ros.png width=500 />
 
 #### Configure
 

@@ -189,9 +189,12 @@ rosrun raspimouse_ros_examples camera.bash
 roslaunch raspimouse_ros_examples object_tracking.launch
 ```
 
-\[Raspberry PiのローカルIPアドレス\]:8080でカメラから取得した画像や処理結果の確認が出来ます．
+物体検出画像は`binary`と`object`というトピックとして発行されます。
+これらの画像は[RViz](http://wiki.ros.org/ja/rviz)
+や[rqt_image_view](http://wiki.ros.org/rqt_image_view)
+で表示できます。
 
-<img src=https://rt-net.github.io/images/raspberry-pi-mouse/web_video_server.png width=500 />
+<img src=https://rt-net.github.io/images/raspberry-pi-mouse/object_tracking_ros.png width=500 />
 
 #### Configure
 
