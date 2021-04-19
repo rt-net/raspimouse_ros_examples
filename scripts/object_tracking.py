@@ -117,7 +117,7 @@ class ObjectTracker():
     def _extract_biggest_contour(self, binary_img):
         biggest_contour_index = False
         biggest_contour_area = 0
-        _, contours, hierarchy = cv2.findContours(
+        contours, hierarchy = cv2.findContours(
             binary_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         for i, cnt in enumerate(contours):
             area = cv2.contourArea(cnt)
