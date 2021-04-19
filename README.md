@@ -301,7 +301,7 @@ LiDARを使ってSLAM（自己位置推定と地図作成）を行うサンプ�
 
 - LiDAR
   - [URG-04LX-UG01](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_1296&products_id=2816)
-  - [RPLIDAR A1](https://www.slamtec.com/en/Lidar/A1)
+  <!-- - [RPLIDAR A1](https://www.slamtec.com/en/Lidar/A1) -->
   - [LDS-01](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_5&products_id=3676)
 - [LiDAR Mount](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3867)
 - Joystick Controller (Optional)
@@ -312,8 +312,8 @@ Raspberry Pi MouseにLiDARを取り付けます。
 
 - URG-04LX-UG01
   - <img src=https://rt-net.github.io/images/raspberry-pi-mouse/mouse_with_urg.JPG width=500 />
-- RPLIDAR A1
-  - <img src=https://rt-net.github.io/images/raspberry-pi-mouse/mouse_with_rplidar.png width=500 />
+<!-- - RPLIDAR A1
+  - <img src=https://rt-net.github.io/images/raspberry-pi-mouse/mouse_with_rplidar.png width=500 /> -->
 - LDS-01
   - <img src=https://rt-net.github.io/images/raspberry-pi-mouse/mouse_with_lds01.JPG width=500 />
   
@@ -324,9 +324,6 @@ Raspberry Pi Mouse上で次のコマンドでノードを起動します。
 ```sh
 # URG
 roslaunch raspimouse_ros_examples mouse_with_lidar.launch urg:=true port:=/dev/ttyACM0
-
-# RPLIDAR
-roslaunch raspimouse_ros_examples mouse_with_lidar.launch rplidar:=true port:=/dev/ttyUSB0
 
 # LDS
 roslaunch raspimouse_ros_examples mouse_with_lidar.launch lds:=true port:=/dev/ttyUSB0
@@ -345,9 +342,6 @@ roslaunch raspimouse_ros_examples teleop.launch mouse:=false joy:=true joyconfig
 ```sh
 # URG
 roslaunch raspimouse_ros_examples slam_gmapping.launch urg:=true
-
-# RPLIDAR
-roslaunch raspimouse_ros_examples slam_gmapping.launch rplidar:=true
 
 # LDS
 roslaunch raspimouse_ros_examples slam_gmapping.launch lds:=true
@@ -385,7 +379,7 @@ rosrun map_server map_saver -f ~/maps/mymap
 
 [![slam_urg](http://img.youtube.com/vi/gWozU47UqVE/sddefault.jpg)](https://youtu.be/gWozU47UqVE)
 
-[![slam_urg](http://img.youtube.com/vi/hV68UqAntfo/sddefault.jpg)](https://youtu.be/hV68UqAntfo)
+<!-- [![slam_urg](http://img.youtube.com/vi/hV68UqAntfo/sddefault.jpg)](https://youtu.be/hV68UqAntfo) -->
 
 [back to example list](#how-to-use-examples)
 

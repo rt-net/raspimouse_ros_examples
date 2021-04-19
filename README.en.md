@@ -294,7 +294,7 @@ This is an example to use LiDAR for SLAM (Simultaneous Localization And Mapping)
 
 - LiDAR
   - [URG-04LX-UG01](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_1296&products_id=2816&language=en)
-  - [RPLIDAR A1](https://www.slamtec.com/en/Lidar/A1)
+  <!-- - [RPLIDAR A1](https://www.slamtec.com/en/Lidar/A1) -->
   - [LDS-01](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_5&products_id=3676&language=en)
 - [LiDAR Mount](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3867&language=en)
 - Joystick Controller (Optional)
@@ -305,8 +305,8 @@ Install a LiDAR to the Raspberry Pi Mouse.
 
 - URG-04LX-UG01
   - <img src=https://rt-net.github.io/images/raspberry-pi-mouse/mouse_with_urg.JPG width=500 />
-- RPLIDAR A1
-  - <img src=https://rt-net.github.io/images/raspberry-pi-mouse/mouse_with_rplidar.png width=500 />
+<!-- - RPLIDAR A1
+  - <img src=https://rt-net.github.io/images/raspberry-pi-mouse/mouse_with_rplidar.png width=500 /> -->
 - LDS-01
   - <img src=https://rt-net.github.io/images/raspberry-pi-mouse/mouse_with_lds01.JPG width=500 />
   
@@ -317,9 +317,6 @@ Launch nodes on Raspberry Pi Mouse with the following command:
 ```sh
 # URG
 roslaunch raspimouse_ros_examples mouse_with_lidar.launch urg:=true port:=/dev/ttyACM0
-
-# RPLIDAR
-roslaunch raspimouse_ros_examples mouse_with_lidar.launch rplidar:=true port:=/dev/ttyUSB0
 
 # LDS
 roslaunch raspimouse_ros_examples mouse_with_lidar.launch lds:=true port:=/dev/ttyUSB0
@@ -337,9 +334,6 @@ Then, launch SLAM packages (on a remote computer recommend) with the following c
 ```sh
 # URG
 roslaunch raspimouse_ros_examples slam_gmapping.launch urg:=true
-
-# RPLIDAR
-roslaunch raspimouse_ros_examples slam_gmapping.launch rplidar:=true
 
 # LDS
 roslaunch raspimouse_ros_examples slam_gmapping.launch lds:=true
