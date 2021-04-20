@@ -17,18 +17,21 @@ ROS 2のサンプルコード集は[こちら](https://github.com/rt-net/raspimo
   - Linux OS
     - Ubuntu server 16.04
     - Ubuntu server 18.04
-    - https://wiki.ubuntu.com/ARM/RaspberryPi
+    - Ubuntu server 20.04
+    - https://ubuntu.com/download/raspberry-pi
   - Device Driver
     - [rt-net/RaspberryPiMouse](https://github.com/rt-net/RaspberryPiMouse)
   - ROS
     - [Kinetic Kame](http://wiki.ros.org/kinetic/Installation/Ubuntu)
     - [Melodic Morenia](http://wiki.ros.org/melodic/Installation/Ubuntu)
+    - [Noetic Ninjemys](http://wiki.ros.org/noetic/Installation/Ubuntu)
   - Raspberry Pi Mouse ROS package
     - https://github.com/ryuichiueda/raspimouse_ros_2
 - Remote Computer (Optional)
   - ROS
     - [Kinetic Kame](http://wiki.ros.org/kinetic/Installation/Ubuntu)
     - [Melodic Morenia](http://wiki.ros.org/melodic/Installation/Ubuntu)
+    - [Noetic Ninjemys](http://wiki.ros.org/noetic/Installation/Ubuntu)
   - Raspberry Pi Mouse ROS package
     - https://github.com/ryuichiueda/raspimouse_ros_2
 
@@ -38,7 +41,7 @@ ROS 2のサンプルコード集は[こちら](https://github.com/rt-net/raspimo
 cd ~/catkin_ws/src
 # Clone ROS packages
 git clone https://github.com/ryuichiueda/raspimouse_ros_2
-git clone https://github.com/rt-net/raspimouse_ros_examples 
+git clone -b $ROS_DISTRO-devel https://github.com/rt-net/raspimouse_ros_examples
 # For direction control example
 git clone https://github.com/rt-net/rt_usb_9axisimu_driver
 
