@@ -302,7 +302,7 @@ This is an example to use LiDAR for SLAM (Simultaneous Localization And Mapping)
 - [LiDAR Mount](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3867&language=en)
 - Joystick Controller (Optional)
 
-This sample does not support RPLiDAR because its package [rplidar_ros](https://github.com/Slamtec/rplidar_ros) have not released to ROS Noetic yet. 
+This sample does not support RPLIDAR because its package [rplidar_ros](https://github.com/Slamtec/rplidar_ros) have not released a ROS Noetic version yet.
   
 #### Installation
 
