@@ -17,18 +17,21 @@ ROS 2 examples is [here](https://github.com/rt-net/raspimouse_ros2_examples).
   - Linux OS
     - Ubuntu server 16.04
     - Ubuntu server 18.04
-    - https://wiki.ubuntu.com/ARM/RaspberryPi
+    - Ubuntu server 20.04
+    - https://ubuntu.com/download/raspberry-pi
   - Device Driver
     - [rt-net/RaspberryPiMouse](https://github.com/rt-net/RaspberryPiMouse)
   - ROS
     - [Kinetic Kame](http://wiki.ros.org/kinetic/Installation/Ubuntu)
     - [Melodic Morenia](http://wiki.ros.org/melodic/Installation/Ubuntu)
+    - [Noetic Ninjemys](http://wiki.ros.org/noetic/Installation/Ubuntu)
   - Raspberry Pi Mouse ROS package
     - https://github.com/ryuichiueda/raspimouse_ros_2
 - Remote Computer (Optional)
   - ROS
     - [Kinetic Kame](http://wiki.ros.org/kinetic/Installation/Ubuntu)
     - [Melodic Morenia](http://wiki.ros.org/melodic/Installation/Ubuntu)
+    - [Noetic Ninjemys](http://wiki.ros.org/noetic/Installation/Ubuntu)
   - Raspberry Pi Mouse ROS package
     - https://github.com/ryuichiueda/raspimouse_ros_2
 
@@ -38,7 +41,7 @@ ROS 2 examples is [here](https://github.com/rt-net/raspimouse_ros2_examples).
 cd ~/catkin_ws/src
 # Clone ROS packages
 git clone https://github.com/ryuichiueda/raspimouse_ros_2
-git clone https://github.com/rt-net/raspimouse_ros_examples 
+git clone -b $ROS_DISTRO-devel https://github.com/rt-net/raspimouse_ros_examples
 # For direction control example
 git clone https://github.com/rt-net/rt_usb_9axisimu_driver
 
@@ -185,10 +188,11 @@ Then, launch nodes with the following command:
 ```sh
 roslaunch raspimouse_ros_examples object_tracking.launch
 ```
+This sample publishes `binary` and `object` topics for the object detection image.
+These images can be viewed with [RViz](http://wiki.ros.org/ja/rviz)
+or [rqt_image_view](http://wiki.ros.org/rqt_image_view).
 
-Browse \[IP address of Raspbery Pi Mouse\]:8080 to show a camera image and a tracking result.
-
-<img src=https://rt-net.github.io/images/raspberry-pi-mouse/web_video_server.png width=500 />
+<img src=https://rt-net.github.io/images/raspberry-pi-mouse/object_tracking_ros.png width=500 />
 
 #### Configure
 
@@ -293,10 +297,12 @@ This is an example to use LiDAR for SLAM (Simultaneous Localization And Mapping)
 
 - LiDAR
   - [URG-04LX-UG01](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_1296&products_id=2816&language=en)
-  - [RPLIDAR A1](https://www.slamtec.com/en/Lidar/A1)
+  <!-- - [RPLIDAR A1](https://www.slamtec.com/en/Lidar/A1) -->
   - [LDS-01](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1348_5&products_id=3676&language=en)
 - [LiDAR Mount](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3867&language=en)
 - Joystick Controller (Optional)
+
+This sample does not support RPLIDAR because its package [rplidar_ros](https://github.com/Slamtec/rplidar_ros) have not released a ROS Noetic version yet.
   
 #### Installation
 
@@ -304,8 +310,8 @@ Install a LiDAR to the Raspberry Pi Mouse.
 
 - URG-04LX-UG01
   - <img src=https://rt-net.github.io/images/raspberry-pi-mouse/mouse_with_urg.JPG width=500 />
-- RPLIDAR A1
-  - <img src=https://rt-net.github.io/images/raspberry-pi-mouse/mouse_with_rplidar.png width=500 />
+<!-- - RPLIDAR A1
+  - <img src=https://rt-net.github.io/images/raspberry-pi-mouse/mouse_with_rplidar.png width=500 /> -->
 - LDS-01
   - <img src=https://rt-net.github.io/images/raspberry-pi-mouse/mouse_with_lds01.JPG width=500 />
   
@@ -316,9 +322,6 @@ Launch nodes on Raspberry Pi Mouse with the following command:
 ```sh
 # URG
 roslaunch raspimouse_ros_examples mouse_with_lidar.launch urg:=true port:=/dev/ttyACM0
-
-# RPLIDAR
-roslaunch raspimouse_ros_examples mouse_with_lidar.launch rplidar:=true port:=/dev/ttyUSB0
 
 # LDS
 roslaunch raspimouse_ros_examples mouse_with_lidar.launch lds:=true port:=/dev/ttyUSB0
@@ -336,9 +339,6 @@ Then, launch SLAM packages (on a remote computer recommend) with the following c
 ```sh
 # URG
 roslaunch raspimouse_ros_examples slam_gmapping.launch urg:=true
-
-# RPLIDAR
-roslaunch raspimouse_ros_examples slam_gmapping.launch rplidar:=true
 
 # LDS
 roslaunch raspimouse_ros_examples slam_gmapping.launch lds:=true
