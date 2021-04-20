@@ -309,7 +309,7 @@ LiDARを使ってSLAM（自己位置推定と地図作成）を行うサンプ�
 - [LiDAR Mount](https://www.rt-shop.jp/index.php?main_page=product_info&cPath=1299_1395&products_id=3867)
 - Joystick Controller (Optional)
 
-RPLiDARについては、パッケージ[rplidar_ros](https://github.com/Slamtec/rplidar_ros)
+RPLIDARについては、パッケージ[rplidar_ros](https://github.com/Slamtec/rplidar_ros)
 がROS Noetic向けにリリースされていないため動作確認していません。
   
 #### Installation
