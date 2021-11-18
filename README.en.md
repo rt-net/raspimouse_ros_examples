@@ -6,6 +6,7 @@
 
 ROS examples for Raspberry Pi Mouse.
 
+Samples for navigation is [here](https://github.com/rt-net/raspimouse_slam_navigation_ros).
 ROS 2 examples is [here](https://github.com/rt-net/raspimouse_ros2_examples).
 
 <img src=https://rt-net.github.io/images/raspberry-pi-mouse/raspberry_pi_mouse.JPG width=500>
