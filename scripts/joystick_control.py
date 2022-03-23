@@ -237,7 +237,7 @@ class JoyWrapper(object):
 
     def _joy_velocity_config(self, joy_msg):
         ADD_VEL_LINEAR_X = 0.1  # m/s
-        ADD_VEL_ANGULAR_Z = 0.1 * math.pi  # m/s
+        ADD_VEL_ANGULAR_Z = 0.1 * math.pi  # rad/s
         BUZZER_FREQ_ADD = 880  # Hz
         BUZZER_FREQ_SUB = 440  # Hz
         BUZZER_FREQ_RESET = 660  # Hz
